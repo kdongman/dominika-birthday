@@ -579,8 +579,6 @@ function App() {
                   alt="Dominika in her birthday portrait"
                   style={{ objectPosition: `${photoPosition.x}% ${photoPosition.y}%` }}
                 />
-                <span className="cover-birthday-ribbon" aria-hidden="true">✦ HAPPY BIRTHDAY ✦</span>
-                <span className="cover-birthday-seal" aria-hidden="true">🎂</span>
               </div>
               <div className="cover-card__copy">
                 <p>made for Dominika</p>
@@ -638,8 +636,6 @@ function App() {
                       alt="Dominika in her birthday portrait"
                       style={{ objectPosition: `${photoPosition.x}% ${photoPosition.y}%` }}
                     />
-                    <span className="photo-side__ribbon" aria-hidden="true">✦ HAPPY BIRTHDAY ✦</span>
-                    <span className="photo-side__sticker" aria-hidden="true">🎂</span>
                     <span className="photo-side__spark photo-side__spark--one" aria-hidden="true">✦</span>
                     <span className="photo-side__spark photo-side__spark--two" aria-hidden="true">✧</span>
                   </div>

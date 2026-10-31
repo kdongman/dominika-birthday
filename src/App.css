@@ -166,41 +166,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   pointer-events: none;
 }
 
-.cover-birthday-ribbon,
-.photo-side__ribbon {
-  position: absolute;
-  z-index: 2;
-  top: 14px;
-  left: 13px;
-  padding: 7px 10px;
-  color: #fffaf7;
-  border: 1px solid rgba(255, 255, 255, .82);
-  border-radius: 7px;
-  background: linear-gradient(125deg, #bd5570, #dd846b);
-  box-shadow: 0 5px 14px rgba(93, 43, 56, .2);
-  font-size: 8px;
-  font-weight: 750;
-  letter-spacing: .12em;
-  transform: rotate(-4deg);
-}
-
-.cover-birthday-seal {
-  position: absolute;
-  right: 13px;
-  bottom: 13px;
-  z-index: 2;
-  display: grid;
-  width: 43px;
-  height: 43px;
-  place-items: center;
-  border: 2px solid rgba(255, 255, 255, .92);
-  border-radius: 50%;
-  background: #fff6dd;
-  box-shadow: 0 5px 15px rgba(49, 39, 30, .2);
-  font-size: 23px;
-  transform: rotate(8deg);
-}
-
 .cover-card__art .tiny-cake-friend {
   width: 218px;
   height: 193px;
@@ -227,15 +192,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   letter-spacing: -.025em;
 }
 
-.cover-spark {
-  position: absolute;
-  color: #3b82f6;
-  text-shadow: 0 2px 8px rgba(59, 130, 246, .18);
-  pointer-events: none;
-}
-
-.cover-spark--one { top: 16%; left: 17%; font-size: 20px; }
-.cover-spark--two { top: 25%; right: 16%; font-size: 16px; color: #6a9bd7; }
 .arrival-copy { margin: 21px 0 0; color: rgba(225, 235, 250, .79); font-size: 14px; line-height: 1.45; }
 
 .editor-trigger {
@@ -362,23 +318,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 .photo-side { position: relative; display: flex; flex-direction: column; height: 100%; padding: 14px; background: radial-gradient(ellipse at 50% 100%, rgba(246, 204, 179, .2), transparent 65%); }
 .photo-side__art { flex: 1 1 auto; min-height: 0; margin: 3px; border: 5px solid #fff; border-radius: 13px; background: linear-gradient(145deg, #fff0e6, #f7e9f0); box-shadow: 0 9px 22px rgba(104, 65, 67, .16); }
 .photo-side__art .tiny-cake-friend { width: 224px; height: 198px; filter: drop-shadow(0 7px 15px rgba(31, 81, 145, .16)); }
-.photo-side__ribbon { top: 14px; left: 13px; }
-.photo-side__sticker {
-  position: absolute;
-  right: 13px;
-  bottom: 13px;
-  z-index: 2;
-  display: grid;
-  width: 43px;
-  height: 43px;
-  place-items: center;
-  border: 2px solid rgba(255, 255, 255, .94);
-  border-radius: 50%;
-  background: #fff6dd;
-  box-shadow: 0 5px 15px rgba(49, 39, 30, .2);
-  font-size: 23px;
-  transform: rotate(8deg);
-}
 .photo-side__spark { position: absolute; z-index: 2; color: #fff1bd; text-shadow: 0 2px 10px rgba(102, 58, 52, .28); pointer-events: none; }
 .photo-side__spark--one { top: 25%; right: 10%; font-size: 21px; }
 .photo-side__spark--two { bottom: 28%; left: 9%; font-size: 17px; }
