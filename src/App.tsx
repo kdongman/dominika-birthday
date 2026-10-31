@@ -256,34 +256,6 @@ function StarField() {
   )
 }
 
-function TinyCakeFriend() {
-  return (
-    <div className="tiny-cake-friend" aria-hidden="true">
-      <svg className="friend-art" viewBox="0 0 180 150">
-        <ellipse cx="90" cy="137" rx="39" ry="6" fill="#3b82f6" opacity=".2" />
-        <path d="m75 119-7 13m38-13 7 13" fill="none" stroke="#f3f7ff" strokeLinecap="round" strokeWidth="8" />
-        <path d="m63 82-17 12m70-13 13-19" fill="none" stroke="#f3f7ff" strokeLinecap="round" strokeWidth="9" />
-        <path d="m46 94-6 4m6-4-2-7m2 7 7-2m76-19 3-8m-3 8 8-2m-8 2 1 8" fill="none" stroke="#f3f7ff" strokeLinecap="round" strokeWidth="4" />
-        <path d="m63 76 54 0-8 48c-12 7-27 7-39 0z" fill="#f3f7ff" stroke="#9dc9ff" strokeWidth="2" />
-        <path d="M60 75c-13-4-13-22-1-28-2-16 16-23 28-13 8-15 29-12 32 4 17-3 26 16 13 27-5 5-12 8-20 9" fill="#fff" stroke="#b8d7ff" strokeWidth="2.5" />
-        <path d="M90 38V26" stroke="#3b82f6" strokeLinecap="round" strokeWidth="5" />
-        <path d="M90 22c-1 4-5 5-4 8 0 3 2 4 4 4 3 0 5-2 5-4 0-3-3-5-5-8z" fill="#79b8ff" stroke="#fff" strokeWidth="1" />
-        <path d="M90 26v10" stroke="#fff" strokeWidth="1.3" opacity=".85" />
-        <circle cx="78" cy="78" r="2.3" fill="#244d83" />
-        <circle cx="102" cy="78" r="2.3" fill="#244d83" />
-        <path d="M84 86c3 4 9 4 12 0" fill="none" stroke="#3b6090" strokeLinecap="round" strokeWidth="2.4" />
-        <circle cx="70" cy="84" r="2.4" fill="#79b8ff" opacity=".65" />
-        <circle cx="110" cy="84" r="2.4" fill="#79b8ff" opacity=".65" />
-        <path d="m60 60 3-7 3 7 7 3-7 3-3 7-3-7-7-3z" fill="#79b8ff" opacity=".85" />
-        <g className="friend-arm-wave" fill="none" stroke="#f3f7ff" strokeLinecap="round" strokeWidth="5">
-          <path d="m126 67 13-15" />
-          <path d="m139 52 1-7m-1 7 7-3m-7 3 5 5" />
-        </g>
-      </svg>
-    </div>
-  )
-}
-
 function CakeScene({
   extinguished,
   onBlowOut,
@@ -753,13 +725,6 @@ function App() {
                             ? `The episode starts at ${formatEpisodeStart(spotifyStartAt)}. Press play in Spotify below.`
                             : 'Press play in the Spotify player below when you are ready.'}</span>
                     </div>
-                  </div>
-                  <div className="last-rule">
-                    <div>
-                      <p className="rule-lead">One last rule...</p>
-                      <p className="rule-copy">You're not allowed to be sad today. It's your birthday! <span className="text-emoji">😤🎂</span></p>
-                    </div>
-                    <div className="last-rule__friend"><TinyCakeFriend /></div>
                   </div>
                   <div className="letter-footer">
                     <div className="letter-footer__note">

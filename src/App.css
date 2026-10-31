@@ -397,29 +397,12 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 .music-note p { margin: 0; color: #654e58; font-size: 12px; font-weight: 650; }
 .music-note span:not(.music-note__symbol) { display: block; margin-top: 3px; color: #8b7580; font-size: 11px; }
 
-.last-rule {
-  display: flex;
-  align-items: center;
-  min-height: 76px;
-  gap: 10px;
-  margin: 14px 0 7px;
-  padding: 9px 12px;
-  border: 1px solid #efcfbb;
-  border-radius: 7px;
-  background: linear-gradient(125deg, #fff0e8, #fff8e9);
-}
-
-.rule-lead { margin: 0 0 3px; color: #9b5a65; font-family: var(--serif); font-size: 16px; }
-.rule-copy { margin: 0; color: #684f52; font-size: 12px; line-height: 1.42; }
-.last-rule__friend { flex: 0 0 72px; width: 72px; height: 66px; margin-left: auto; }
-.last-rule__friend .tiny-cake-friend { width: 100%; height: 100%; }
-
 .letter-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 13px;
+  margin-top: 22px;
 }
 
 .letter-footer__note { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
@@ -686,10 +669,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   .birthday-card--letter { height: auto; min-height: var(--birthday-card-height); }
   .birthday-card--letter .letter-side { height: auto; overflow: visible; }
   .music-note { margin: 14px 0 11px; padding: 9px 10px; }
-  .last-rule { min-height: 68px; margin-top: 9px; padding: 8px 9px; gap: 7px; }
-  .last-rule__friend { flex-basis: 60px; width: 60px; height: 56px; }
-  .rule-copy { font-size: 11px; }
-  .letter-footer { align-items: stretch; flex-direction: column; margin-top: 10px; }
+  .letter-footer { align-items: stretch; flex-direction: column; margin-top: 18px; }
   .letter-footer__note { align-items: center; }
   .letter-footer .primary-button { width: 100%; }
   .card-editor { width: calc(100vw - 22px); max-height: 92dvh; border-radius: 13px; }
@@ -714,8 +694,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   .letter-body { margin-top: 14px; line-height: 1.45; }
   .letter-body p { margin-bottom: 7px; }
   .music-note { margin: 10px 0 8px; }
-  .last-rule { min-height: 60px; margin-top: 7px; }
-  .letter-footer { margin-top: 8px; }
+  .letter-footer { margin-top: 15px; }
   .poster-wish-copy { top: 83%; left: 4%; width: 92%; padding: 4px 3px; }
   .poster-wish-copy .wish-question { font-size: 12px; }
   .poster-wish-copy .wish-response { margin-top: 2px; font-size: 9px; }
@@ -727,8 +706,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 @media (max-width: 360px) {
   .letter-side { padding-right: 18px; padding-left: 18px; }
   .letter-side h2 { font-size: 29px; }
-  .last-rule__friend { flex-basis: 50px; width: 50px; height: 48px; }
-  .rule-copy { font-size: 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
