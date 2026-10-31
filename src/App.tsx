@@ -278,8 +278,9 @@ function CakeScene({
 }
 
 function App() {
-  const [scene, setScene] = useState<Scene>('message')
+  const [scene, setScene] = useState<Scene>('surprise')
   const [exiting, setExiting] = useState(false)
+  const [giftOpening, setGiftOpening] = useState(false)
   const [cardSide, setCardSide] = useState<CardSide>('photo')
   const [extinguished, setExtinguished] = useState(false)
   const [wishVisible, setWishVisible] = useState(false)
@@ -304,9 +305,10 @@ function App() {
   const musicInputRef = useRef<HTMLInputElement>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
   const draftAudioRef = useRef<HTMLAudioElement>(null)
-  const currentSceneRef = useRef<Scene>('message')
+  const currentSceneRef = useRef<Scene>('surprise')
   const hasBlownOutRef = useRef(false)
   const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const giftOpenTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const wishTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const continueTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const photoUrl = useObjectUrl(photoFile)
@@ -325,6 +327,10 @@ function App() {
       sceneHeadingRef.current?.focus({ preventScroll: true })
     }
   }, [scene])
+
+  useEffect(() => {
+    if (scene === 'message' && giftOpening) setGiftOpening(false)
+  }, [scene, giftOpening])
 
   useEffect(() => {
     const dialog = editorDialogRef.current
@@ -352,6 +358,7 @@ function App() {
 
   useEffect(() => () => {
     if (transitionTimer.current) clearTimeout(transitionTimer.current)
+    if (giftOpenTimer.current) clearTimeout(giftOpenTimer.current)
     if (wishTimer.current) clearTimeout(wishTimer.current)
     if (continueTimer.current) clearTimeout(continueTimer.current)
   }, [])
@@ -476,47 +483,54 @@ function App() {
   }
 
   const openCard = () => {
+    if (giftOpening || exiting) return
     if (musicMode === 'file' && musicUrl && audioRef.current) {
       audioRef.current.currentTime = 0
       audioRef.current.play().catch(() => {
         setPlaybackHint('브라우저가 자동 재생을 막았어요. 아래 재생 버튼을 눌러 주세요.')
       })
     }
-    setCardSide('letter')
-    moveTo('message')
+    setCardSide('photo')
+    setGiftOpening(true)
+    giftOpenTimer.current = setTimeout(() => moveTo('message'), 580)
   }
 
   return (
     <main className="experience">
       <StarField />
       <section
-        className={`scene scene--${scene}${exiting ? ' scene--exit' : ''}${hasMusic ? ' scene--with-music' : ''}`}
+        className={`scene scene--${scene}${exiting ? ' scene--exit' : ''}${giftOpening ? ' scene--opening' : ''}${hasMusic ? ' scene--with-music' : ''}`}
         aria-label={scene === 'surprise' ? 'Birthday card arrival' : scene === 'birthday' ? 'Birthday wish' : 'Birthday card'}
       >
         {scene === 'surprise' && (
           <div className="surprise-content">
-            <p className="eyebrow">a little birthday surprise</p>
-            <div
-              className="cover-card"
-              role="group"
-              aria-label="Birthday card photo for Dominika"
+            <p className="eyebrow">a little something, just for you</p>
+            <h1 className="gift-heading" ref={sceneHeadingRef} tabIndex={-1}>A birthday letter<br /><span>is waiting.</span></h1>
+            <button
+              className={`gift-envelope${giftOpening ? ' gift-envelope--opening' : ''}`}
+              type="button"
+              onClick={openCard}
+              disabled={giftOpening || exiting}
+              aria-label="Open Dominika's birthday letter"
             >
-              <div className="cover-card__art">
-                <img
-                  className="card-photo"
-                  src={displayPhotoUrl}
-                  alt="Dominika in her birthday portrait"
-                  style={{ objectPosition: `${photoPosition.x}% ${photoPosition.y}%` }}
-                />
-              </div>
-              <div className="cover-card__copy">
-                <p>made for Dominika</p>
-                <h1 ref={sceneHeadingRef} tabIndex={-1}>Happy 20th Birthday!</h1>
-              </div>
-            </div>
-            <p className="arrival-copy">Hey Dominika, there's a little letter waiting inside.</p>
-            <button className="primary-button" onClick={openCard}>
-              Open your card <span aria-hidden="true">✦</span>
+              <span className="gift-envelope__spark gift-envelope__spark--one" aria-hidden="true">✦</span>
+              <span className="gift-envelope__spark gift-envelope__spark--two" aria-hidden="true">✧</span>
+              <span className="gift-envelope__letter" aria-hidden="true">
+                <span className="gift-envelope__letter-to">For Dominika</span>
+                <span className="gift-envelope__letter-title">A little birthday<br />surprise inside</span>
+                <span className="gift-envelope__letter-heart">♥</span>
+              </span>
+              <span className="gift-envelope__body" aria-hidden="true">
+                <span className="gift-envelope__fold gift-envelope__fold--left" />
+                <span className="gift-envelope__fold gift-envelope__fold--right" />
+                <span className="gift-envelope__pocket" />
+                <span className="gift-envelope__flap" />
+                <span className="gift-envelope__seal">♥</span>
+              </span>
+            </button>
+            <p className="arrival-copy">Tap the envelope to open your birthday card.</p>
+            <button className="primary-button" type="button" onClick={openCard} disabled={giftOpening || exiting}>
+              Open your letter <span aria-hidden="true">↗</span>
             </button>
             <button className="editor-trigger" type="button" onClick={openEditor}>
               Customize photo and music
@@ -632,7 +646,7 @@ function App() {
         )}
       </section>
       <div className={`scene-progress scene-progress--${scene}`} aria-hidden="true">
-        {(['message', 'birthday'] as Scene[]).map((item) => (
+        {(['surprise', 'message', 'birthday'] as Scene[]).map((item) => (
           <span key={item} className={scene === item ? 'is-active' : ''} />
         ))}
       </div>
