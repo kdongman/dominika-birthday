@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import dominikaPhoto from './assets/dominika.jpg'
-import birthdayEnvelope from './assets/birthday-envelope.png'
 import birthdayPoster from './assets/dominika-birthday-poster.png'
 import './App.css'
 
@@ -518,9 +517,17 @@ function App() {
                 <span className="gift-envelope__card-to">For Dominika</span>
                 <span className="gift-envelope__card-message">A little birthday wish</span>
               </span>
-              <img className="gift-envelope__art" src={birthdayEnvelope} alt="" draggable={false} />
-              <span className="gift-envelope__spark gift-envelope__spark--one" aria-hidden="true">✦</span>
-              <span className="gift-envelope__spark gift-envelope__spark--two" aria-hidden="true">✧</span>
+              <span className="gift-envelope__back" aria-hidden="true" />
+              <span className="gift-envelope__fold gift-envelope__fold--left" aria-hidden="true" />
+              <span className="gift-envelope__fold gift-envelope__fold--right" aria-hidden="true" />
+              <span className="gift-envelope__fold gift-envelope__fold--bottom" aria-hidden="true" />
+              <span className="gift-envelope__flap" aria-hidden="true" />
+              <span className="gift-envelope__seal" aria-hidden="true">D</span>
+              <span className="gift-envelope__address" aria-hidden="true">
+                <span>For Dominika</span>
+                <i />
+                <i />
+              </span>
             </button>
             <p className="arrival-copy">Tap the envelope to open your birthday card.</p>
             <button className="primary-button" type="button" onClick={openCard} disabled={giftOpening || exiting}>
