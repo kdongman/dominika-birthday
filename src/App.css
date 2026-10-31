@@ -275,6 +275,10 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 .photo-side__copy .photocard-description { margin: 0; color: #806774; font-family: var(--serif); font-size: 13px; line-height: 1.45; text-wrap: balance; }
 .photo-side__copy h2 + .photocard-description { margin-top: 8px; }
 .photo-side__copy .photocard-description + .photocard-description { margin-top: 5px; }
+.photo-card-pager { display: flex; align-items: center; justify-content: center; gap: 10px; color: #8b6975; font-size: 11px; }
+.photo-card-pager button { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; color: #a34d68; border: 1px solid rgba(185, 126, 137, .42); border-radius: 50%; background: rgba(255, 255, 255, .58); font-size: 23px; line-height: 1; cursor: pointer; }
+.photo-card-pager button:disabled { opacity: .38; cursor: default; }
+.photo-card-pager button:not(:disabled):hover { border-color: #bd7889; background: #fff; }
 .photo-side .text-button { align-self: center; margin-top: 10px; color: #a34d68; }
 
 .scene--message .reader-heading { animation: introLift .56s cubic-bezier(.2, .75, .25, 1) .05s both; }

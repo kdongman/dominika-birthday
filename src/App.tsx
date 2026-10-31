@@ -20,6 +20,24 @@ const DEFAULT_LETTER_MESSAGE = [
   'And I hope this little surprise made you smile too. :)',
   'Enjoy your day, birthday girl! ✨',
 ].join('\n\n')
+const PHOTO_CARD_COPY = [
+  {
+    label: '✦ MADE JUST FOR YOU ✦',
+    heading: 'For you, birthday girl. ♡',
+    paragraphs: [
+      "I made this little surprise hoping it'd make you smile.",
+      'Hope you have the loveliest day. 💙',
+    ],
+  },
+  {
+    label: '✦ YOUR NEXT CHAPTER ✦',
+    heading: 'Twenty looks lovely on you. ♡',
+    paragraphs: [
+      'Here’s to new adventures, easy laughter, and little moments worth keeping.',
+      'I’m glad I get to celebrate you. 💙',
+    ],
+  },
+] as const
 const LETTER_STORAGE_KEY = 'dominika-birthday-letter-message'
 const LETTER_MAX_LENGTH = 1200
 let birthdayPosterLoad: Promise<void> | null = null
@@ -329,6 +347,7 @@ function App() {
   const [exiting, setExiting] = useState(false)
   const [giftOpening, setGiftOpening] = useState(false)
   const [cardSide, setCardSide] = useState<CardSide>('photo')
+  const [photoCardIndex, setPhotoCardIndex] = useState(0)
   const [extinguished, setExtinguished] = useState(false)
   const [wishVisible, setWishVisible] = useState(false)
   const [continueVisible, setContinueVisible] = useState(false)
@@ -372,6 +391,7 @@ function App() {
   const spotifyDraftContent = getSpotifyContent(spotifyDraft)
   const hasMusic = musicMode === 'file' ? Boolean(musicUrl) : musicMode === 'spotify' && Boolean(spotifyContent)
   const letterParagraphs = letterMessage.trim().split(/\n\s*\n+/).map((paragraph) => paragraph.trim()).filter(Boolean)
+  const photoCardCopy = PHOTO_CARD_COPY[photoCardIndex]
 
   useEffect(() => {
     if (currentSceneRef.current !== scene) {
@@ -673,8 +693,8 @@ function App() {
             </div>
             <article
               className={`birthday-card birthday-card--${cardSide}`}
-              key={cardSide}
-              aria-label={cardSide === 'photo' ? 'Front of the birthday card' : 'Back of the birthday card'}
+              key={cardSide === 'photo' ? `photo-${photoCardIndex}` : cardSide}
+              aria-label={cardSide === 'photo' ? `Birthday photo card ${photoCardIndex + 1} of ${PHOTO_CARD_COPY.length}` : 'Back of the birthday card'}
             >
               {cardSide === 'photo' ? (
                 <div className="photo-side">
@@ -689,10 +709,30 @@ function App() {
                     <span className="photo-side__spark photo-side__spark--two" aria-hidden="true">✧</span>
                   </div>
                   <div className="photo-side__copy">
-                    <p className="card-recipient">✦ MADE JUST FOR YOU ✦</p>
-                    <h2>For you, birthday girl. ♡</h2>
-                    <p className="photocard-description">I made this little surprise hoping it'd make you smile.</p>
-                    <p className="photocard-description">Hope you have the loveliest day. 💙</p>
+                    <p className="card-recipient">{photoCardCopy.label}</p>
+                    <h2>{photoCardCopy.heading}</h2>
+                    {photoCardCopy.paragraphs.map((paragraph) => (
+                      <p className="photocard-description" key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+                  <div className="photo-card-pager" role="group" aria-label="Birthday photo cards">
+                    <button
+                      type="button"
+                      aria-label="Previous birthday card"
+                      disabled={photoCardIndex === 0}
+                      onClick={() => setPhotoCardIndex((index) => Math.max(0, index - 1))}
+                    >
+                      <span aria-hidden="true">‹</span>
+                    </button>
+                    <span>Card {photoCardIndex + 1} of {PHOTO_CARD_COPY.length}</span>
+                    <button
+                      type="button"
+                      aria-label="Next birthday card"
+                      disabled={photoCardIndex === PHOTO_CARD_COPY.length - 1}
+                      onClick={() => setPhotoCardIndex((index) => Math.min(PHOTO_CARD_COPY.length - 1, index + 1))}
+                    >
+                      <span aria-hidden="true">›</span>
+                    </button>
                   </div>
                   <button className="text-button" type="button" onClick={() => setCardSide('letter')}>
                     Read your letter <span aria-hidden="true">↗</span>
