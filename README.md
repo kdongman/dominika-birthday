@@ -31,4 +31,4 @@ Import this folder as a project and use:
 
 ### GitHub Pages
 
-The included GitHub Actions workflow builds and deploys the site whenever changes reach `main`. For a repository named `dominika-birthday`, the site URL is `https://kdongman.github.io/dominika-birthday/`.
+The included GitHub Actions workflow can build and deploy the site when manually run from the Actions tab. For a public repository named `dominika-birthday`, the site URL is `https://kdongman.github.io/dominika-birthday/`. The repository must be public for visitors to access the site without GitHub sign-in.
