@@ -652,7 +652,7 @@ function App() {
                 <div className="letter-side">
                   <div className="letter-stamp" aria-hidden="true"><span>✦</span><small>20</small></div>
                   <p className="letter-kicker">for your 20th birthday</p>
-                  <h2>Happy Birthday,<br /><span>Dominika!</span> <span className="text-emoji">💙</span></h2>
+                  <h2>Happy Birthday,<br /><span>Dominika!</span> <span className="text-emoji">💗</span></h2>
                   <div className="letter-body">
                     <p>I wanted to make you something a little different instead of just sending a birthday message.</p>
                     <p>I hope this new chapter brings you beautiful memories, unexpected adventures, lots of laughter, and plenty of reasons to smile.</p>
@@ -680,7 +680,7 @@ function App() {
                     <div className="last-rule__friend"><TinyCakeFriend /></div>
                   </div>
                   <div className="letter-footer">
-                    <p>Made just for Dominika <span className="text-emoji">💙</span></p>
+                    <p>Made just for Dominika <span className="text-emoji">💗</span></p>
                     <button className="primary-button primary-button--small" onClick={() => moveTo('birthday')}>
                       One last thing <span aria-hidden="true">✦</span>
                     </button>

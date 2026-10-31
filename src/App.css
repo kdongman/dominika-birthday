@@ -353,9 +353,18 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  scrollbar-color: #b5cce9 transparent;
-  padding: 36px 43px 27px;
-  color: #101d35;
+  scrollbar-color: #e2b8ad transparent;
+  padding: 36px 30px 27px;
+  color: #59434d;
+  background:
+    radial-gradient(ellipse at 100% 0, rgba(237, 198, 157, .2), transparent 34%),
+    linear-gradient(155deg, #fffdf8 0%, #fff9f4 56%, #fff4f6 100%);
+}
+
+.birthday-card--letter {
+  border-color: rgba(236, 184, 137, .82);
+  background: linear-gradient(155deg, #fffdf8 0%, #fff9f4 56%, #fff4f6 100%);
+  box-shadow: 0 20px 54px rgba(0, 0, 0, .26), 0 0 28px rgba(230, 148, 150, .12);
 }
 
 .letter-side::before {
@@ -366,7 +375,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   right: 30px;
   height: 3px;
   border-radius: 0 0 4px 4px;
-  background: #3b82f6;
+  background: linear-gradient(90deg, #c86d73, #e0b36e, #c86d73);
 }
 
 .letter-stamp {
@@ -379,21 +388,22 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   justify-content: center;
   width: 43px;
   height: 43px;
-  border: 1px solid rgba(59, 130, 246, .43);
+  border: 1px solid rgba(190, 111, 104, .46);
   border-radius: 50%;
-  color: #3b82f6;
+  color: #b66b69;
+  background: rgba(255, 255, 255, .55);
   transform: rotate(9deg);
 }
 
 .letter-stamp span { font-size: 11px; line-height: 1; }
 .letter-stamp small { margin-top: 1px; font-family: var(--serif); font-size: 12px; }
-.letter-kicker { margin: 1px 0 8px; color: #59708d; font-size: 11px; letter-spacing: .035em; }
-.letter-side h2 { margin: 0; font-size: clamp(29px, 6.5vw, 37px); line-height: 1.06; letter-spacing: -.025em; }
-.letter-side h2 span:not(.text-emoji) { color: #245cae; }
+.letter-kicker { margin: 1px 0 8px; color: #a37171; font-size: 11px; letter-spacing: .035em; }
+.letter-side h2 { margin: 0; color: #59414a; font-size: clamp(27px, 5.8vw, 33px); line-height: 1.06; letter-spacing: -.025em; }
+.letter-side h2 span:not(.text-emoji) { color: #ad5368; }
 
 .letter-body {
   margin-top: 21px;
-  color: #30435e;
+  color: #5f4d51;
   font-family: var(--serif);
   font-size: 14px;
   line-height: 1.58;
@@ -401,7 +411,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 }
 
 .letter-body p { margin: 0 0 11px; }
-.letter-wish { color: #173d71; }
+.letter-wish { color: #984e63; }
 
 .music-note {
   display: flex;
@@ -409,9 +419,10 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   gap: 12px;
   margin: 18px 0 14px;
   padding: 11px 13px;
-  color: #37577f;
-  border-top: 1px solid #d7e5f6;
-  border-bottom: 1px solid #d7e5f6;
+  color: #805767;
+  border-top: 1px solid #efd9d3;
+  border-bottom: 1px solid #efd9d3;
+  background: rgba(255, 255, 255, .34);
 }
 
 .music-note__symbol {
@@ -420,15 +431,15 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   place-items: center;
   width: 32px;
   height: 32px;
-  color: #245cae;
+  color: #b45668;
   border-radius: 50%;
-  background: #e7f1ff;
+  background: #fce9e3;
   font-family: var(--serif);
   font-size: 19px;
 }
 
-.music-note p { margin: 0; color: #304d72; font-size: 12px; font-weight: 650; }
-.music-note span:not(.music-note__symbol) { display: block; margin-top: 3px; color: #6a7d96; font-size: 11px; }
+.music-note p { margin: 0; color: #654e58; font-size: 12px; font-weight: 650; }
+.music-note span:not(.music-note__symbol) { display: block; margin-top: 3px; color: #8b7580; font-size: 11px; }
 
 .last-rule {
   display: flex;
@@ -437,13 +448,13 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   gap: 10px;
   margin: 14px 0 7px;
   padding: 9px 12px;
-  border: 1px solid #d9e8fa;
+  border: 1px solid #efcfbb;
   border-radius: 7px;
-  background: #edf4ff;
+  background: linear-gradient(125deg, #fff0e8, #fff8e9);
 }
 
-.rule-lead { margin: 0 0 3px; color: #305d98; font-family: var(--serif); font-size: 16px; }
-.rule-copy { margin: 0; color: #243d61; font-size: 12px; line-height: 1.42; }
+.rule-lead { margin: 0 0 3px; color: #9b5a65; font-family: var(--serif); font-size: 16px; }
+.rule-copy { margin: 0; color: #684f52; font-size: 12px; line-height: 1.42; }
 .last-rule__friend { flex: 0 0 72px; width: 72px; height: 66px; margin-left: auto; }
 .last-rule__friend .tiny-cake-friend { width: 100%; height: 100%; }
 
@@ -455,8 +466,10 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   margin-top: 13px;
 }
 
-.letter-footer > p { margin: 0; color: #46678e; font-family: var(--serif); font-size: 13px; }
+.letter-footer > p { margin: 0; color: #7a5964; font-family: var(--serif); font-size: 13px; }
 .primary-button--small { min-width: 164px; min-height: 46px; margin: 0; padding: 0 17px; border-radius: 10px; font-size: 12px; }
+.letter-footer .primary-button { border-color: rgba(255, 255, 255, .6); background: #bb5d70; box-shadow: 0 8px 21px rgba(141, 66, 83, .18); }
+.letter-footer .primary-button:hover { background: #a94d62; box-shadow: 0 12px 26px rgba(141, 66, 83, .24); }
 
 .birthday-content {
   display: flex;
@@ -723,6 +736,8 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   .letter-stamp { top: 15px; right: 17px; width: 38px; height: 38px; }
   .letter-body { margin-top: 17px; font-size: 13.5px; line-height: 1.52; }
   .letter-body p { margin-bottom: 9px; }
+  .birthday-card--letter { height: auto; min-height: var(--birthday-card-height); }
+  .birthday-card--letter .letter-side { height: auto; overflow: visible; }
   .music-note { margin: 14px 0 11px; padding: 9px 10px; }
   .last-rule { min-height: 68px; margin-top: 9px; padding: 8px 9px; gap: 7px; }
   .last-rule__friend { flex-basis: 60px; width: 60px; height: 56px; }
