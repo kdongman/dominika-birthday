@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import dominikaPhoto from './assets/dominika.jpg'
 import birthdayPoster from './assets/dominika-birthday-poster.png'
+import birthdayFirstPage from './assets/birthday-first-page.png'
 import './App.css'
 
 type Scene = 'surprise' | 'message' | 'birthday'
@@ -656,39 +657,34 @@ function App() {
         aria-label={scene === 'surprise' ? 'Birthday card arrival' : scene === 'birthday' ? 'Birthday wish' : 'Birthday card'}
       >
         {scene === 'surprise' && (
-          <div className="surprise-content">
-            <p className="eyebrow">a little something, just for you</p>
-            <h1 className="gift-heading" ref={sceneHeadingRef} tabIndex={-1}>A birthday letter<br /><span>is waiting.</span></h1>
+          <div className={`surprise-artboard${giftOpening ? ' surprise-artboard--opening' : ''}`}>
+            <img
+              className="surprise-artboard__image"
+              src={birthdayFirstPage}
+              alt="A birthday letter for Dominika, tucked into a sealed envelope."
+              draggable={false}
+            />
             <button
-              className={`gift-envelope${giftOpening ? ' gift-envelope--opening' : ''}`}
+              className="surprise-artboard__hit surprise-artboard__hit--envelope"
               type="button"
               onClick={openCard}
               disabled={giftOpening || exiting}
-              aria-label="Open Dominika's birthday letter"
-            >
-              <span className="gift-envelope__card" aria-hidden="true">
-                <span className="gift-envelope__card-to">For Dominika</span>
-                <span className="gift-envelope__card-message">A little birthday wish</span>
-              </span>
-              <span className="gift-envelope__back" aria-hidden="true" />
-              <span className="gift-envelope__fold gift-envelope__fold--left" aria-hidden="true" />
-              <span className="gift-envelope__fold gift-envelope__fold--right" aria-hidden="true" />
-              <span className="gift-envelope__fold gift-envelope__fold--bottom" aria-hidden="true" />
-              <span className="gift-envelope__flap" aria-hidden="true" />
-              <span className="gift-envelope__seal" aria-hidden="true">D</span>
-              <span className="gift-envelope__address" aria-hidden="true">
-                <span>For Dominika</span>
-                <i />
-                <i />
-              </span>
-            </button>
-            <p className="arrival-copy">Tap the envelope to open your birthday card.</p>
-            <button className="primary-button" type="button" onClick={openCard} disabled={giftOpening || exiting}>
-              Open your letter <span aria-hidden="true">↗</span>
-            </button>
-            <button className="editor-trigger" type="button" onClick={openEditor}>
-              Customize your card
-            </button>
+              aria-label="Open the birthday envelope"
+            />
+            <button
+              className="surprise-artboard__hit surprise-artboard__hit--open"
+              type="button"
+              onClick={openCard}
+              disabled={giftOpening || exiting}
+              aria-label="Open your letter"
+            />
+            <button
+              className="surprise-artboard__hit surprise-artboard__hit--customize"
+              type="button"
+              onClick={openEditor}
+              disabled={giftOpening || exiting}
+              aria-label="Customize your card"
+            />
           </div>
         )}
 
