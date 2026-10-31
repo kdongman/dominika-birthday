@@ -147,10 +147,6 @@ function getSpotifyContent(value: string): SpotifyContent | null {
   }
 }
 
-function formatEpisodeStart(seconds: number) {
-  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`
-}
-
 function loadSpotifyIframeAPI() {
   if (window.birthdaySpotifyIframeAPI) return Promise.resolve(window.birthdaySpotifyIframeAPI)
   if (window.birthdaySpotifyIframePromise) return window.birthdaySpotifyIframePromise
@@ -713,19 +709,6 @@ function App() {
                         {paragraph}
                       </p>
                     ))}
-                  </div>
-                  <div className="music-note" role="note">
-                    <span className="music-note__symbol" aria-hidden="true">♪</span>
-                    <div>
-                      <p>{hasMusic ? 'A song is tucked into this card.' : 'No song was added to this card.'}</p>
-                      <span>{!hasMusic
-                        ? 'Take your time with the letter.'
-                        : musicMode === 'file'
-                          ? 'It starts when this page opens. If autoplay is blocked, press play below.'
-                          : spotifyContent?.kind === 'episode' && spotifyStartAt > 0
-                            ? `The episode starts at ${formatEpisodeStart(spotifyStartAt)}. Press play in Spotify below.`
-                            : 'Press play in the Spotify player below when you are ready.'}</span>
-                    </div>
                   </div>
                   <div className="letter-footer">
                     <div className="letter-footer__note">

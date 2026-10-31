@@ -16,7 +16,7 @@
   --soft-white: #f3f7ff;
   --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
   --birthday-card-width: min(82vw, 350px);
-  --birthday-card-height: clamp(410px, 61dvh, 500px);
+  --birthday-card-height: clamp(590px, 61dvh, 660px);
 }
 
 * { box-sizing: border-box; }
@@ -307,11 +307,8 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 
 .letter-side {
   position: relative;
-  height: 100%;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: #e2b8ad transparent;
+  height: auto;
+  overflow: visible;
   padding: 36px 30px 27px;
   color: #59434d;
   background:
@@ -320,10 +317,14 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 }
 
 .birthday-card--letter {
+  height: auto;
+  min-height: var(--birthday-card-height);
   border-color: rgba(236, 184, 137, .82);
   background: linear-gradient(155deg, #fffdf8 0%, #fff9f4 56%, #fff4f6 100%);
   box-shadow: 0 20px 54px rgba(0, 0, 0, .26), 0 0 28px rgba(230, 148, 150, .12);
 }
+
+.birthday-card--letter .letter-side { min-height: calc(var(--birthday-card-height) - 2px); }
 
 .letter-side::before {
   position: absolute;
@@ -370,34 +371,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 
 .letter-body p { margin: 0 0 11px; }
 .letter-wish { color: #984e63; }
-
-.music-note {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 18px 0 14px;
-  padding: 11px 13px;
-  color: #805767;
-  border-top: 1px solid #efd9d3;
-  border-bottom: 1px solid #efd9d3;
-  background: rgba(255, 255, 255, .34);
-}
-
-.music-note__symbol {
-  display: grid;
-  flex: 0 0 32px;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  color: #b45668;
-  border-radius: 50%;
-  background: #fce9e3;
-  font-family: var(--serif);
-  font-size: 19px;
-}
-
-.music-note p { margin: 0; color: #654e58; font-size: 12px; font-weight: 650; }
-.music-note span:not(.music-note__symbol) { display: block; margin-top: 3px; color: #8b7580; font-size: 11px; }
 
 .letter-footer {
   display: flex;
@@ -661,19 +634,15 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   .scene--birthday { padding: 0; }
   .scene--message { padding-top: max(24px, env(safe-area-inset-top)); padding-bottom: max(65px, env(safe-area-inset-bottom)); }
   .message-content { padding-bottom: 10px; }
-  .photo-side { padding: 15px; }
+  .photo-side { justify-content: space-between; padding: 15px; }
+  .photo-side__art { flex: 0 1 310px; }
   .photo-side__art .tiny-cake-friend { width: 204px; height: 184px; }
-  .letter-side { padding: 34px 25px 23px; }
+  .letter-side { padding: 34px 25px 16px; }
   .letter-side::before { left: 22px; right: 22px; }
   .letter-stamp { top: 15px; right: 17px; width: 38px; height: 38px; }
-  .letter-body { margin-top: 17px; font-size: 13.5px; line-height: 1.52; }
-  .letter-body p { margin-bottom: 9px; }
-  .birthday-card--letter { height: var(--birthday-card-height); }
-  .birthday-card--letter .letter-side { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
-  .birthday-card--letter .letter-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
-  .birthday-card--letter .letter-footer { flex: 0 0 auto; }
-  .music-note { margin: 14px 0 11px; padding: 9px 10px; }
-  .letter-footer { align-items: stretch; flex-direction: column; margin-top: 18px; }
+  .letter-body { margin-top: 15px; font-size: 13.5px; line-height: 1.52; }
+  .letter-body p { margin-bottom: 8px; }
+  .letter-footer { align-items: stretch; flex-direction: column; margin-top: 14px; }
   .letter-footer__note { align-items: center; }
   .letter-footer .primary-button { width: 100%; }
   .card-editor { width: calc(100vw - 22px); max-height: 92dvh; border-radius: 13px; }
@@ -687,7 +656,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 }
 
 @media (max-height: 720px) {
-  :root { --birthday-card-height: clamp(350px, 60dvh, 420px); }
   .scene { padding-top: max(20px, env(safe-area-inset-top)); padding-bottom: max(52px, env(safe-area-inset-bottom)); }
   .scene--surprise { place-items: center; overflow: hidden; padding: 0; }
   .scene--message { padding-top: 18px; padding-bottom: 56px; }
@@ -697,7 +665,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   .letter-side { padding-top: 31px; padding-bottom: 20px; }
   .letter-body { margin-top: 14px; line-height: 1.45; }
   .letter-body p { margin-bottom: 7px; }
-  .music-note { margin: 10px 0 8px; }
   .letter-footer { margin-top: 15px; }
   .poster-wish-copy { top: 83%; left: 4%; width: 92%; padding: 4px 3px; }
   .poster-wish-copy .wish-question { font-size: 12px; }
