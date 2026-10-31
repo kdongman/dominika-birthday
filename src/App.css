@@ -268,12 +268,14 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 .photo-side__spark--one { top: 25%; right: 10%; font-size: 21px; }
 .photo-side__spark--two { bottom: 28%; left: 9%; font-size: 17px; }
 .photo-side__copy { padding: 13px 6px 0; text-align: center; }
-.photo-side__copy .card-recipient { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 7px; padding: 5px 10px; color: #a14d65; border: 1px solid #f2d2ca; border-radius: 999px; background: #fff1ee; font-size: 9px; letter-spacing: .11em; }
+.photo-side__copy .card-recipient { display: inline-flex; align-items: center; margin: 0 0 8px; padding: 5px 10px; color: #a14d65; border: 1px solid #f2d2ca; border-radius: 999px; background: #fff1ee; font-size: 9px; letter-spacing: .11em; }
 .photo-side__copy .card-recipient::before,
-.photo-side__copy .card-recipient::after { color: #d79b59; content: "✦"; font-size: 9px; }
-.photo-side__copy h2 { margin: 0; color: #803b55; font-size: clamp(25px, 5.8vw, 32px); line-height: 1.04; letter-spacing: -.035em; }
-.photo-side__copy > p:last-child { margin: 7px 0 0; color: #806774; font-family: var(--serif); font-size: 13px; }
-.photo-side .text-button { align-self: center; margin-top: 9px; color: #a34d68; }
+.photo-side__copy .card-recipient::after { content: none; }
+.photo-side__copy h2 { margin: 0; color: #803b55; font-size: clamp(23px, 6vw, 29px); line-height: 1.1; letter-spacing: -.035em; text-wrap: balance; }
+.photo-side__copy .photocard-description { margin: 0; color: #806774; font-family: var(--serif); font-size: 13px; line-height: 1.45; text-wrap: balance; }
+.photo-side__copy h2 + .photocard-description { margin-top: 8px; }
+.photo-side__copy .photocard-description + .photocard-description { margin-top: 5px; }
+.photo-side .text-button { align-self: center; margin-top: 10px; color: #a34d68; }
 
 .scene--message .reader-heading { animation: introLift .56s cubic-bezier(.2, .75, .25, 1) .05s both; }
 .scene--message .birthday-card--photo { animation: photoCardArrive .9s cubic-bezier(.18, .82, .24, 1) .16s both; }
@@ -666,8 +668,10 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   .letter-stamp { top: 15px; right: 17px; width: 38px; height: 38px; }
   .letter-body { margin-top: 17px; font-size: 13.5px; line-height: 1.52; }
   .letter-body p { margin-bottom: 9px; }
-  .birthday-card--letter { height: auto; min-height: var(--birthday-card-height); }
-  .birthday-card--letter .letter-side { height: auto; overflow: visible; }
+  .birthday-card--letter { height: var(--birthday-card-height); }
+  .birthday-card--letter .letter-side { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+  .birthday-card--letter .letter-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+  .birthday-card--letter .letter-footer { flex: 0 0 auto; }
   .music-note { margin: 14px 0 11px; padding: 9px 10px; }
   .letter-footer { align-items: stretch; flex-direction: column; margin-top: 18px; }
   .letter-footer__note { align-items: center; }

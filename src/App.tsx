@@ -693,12 +693,13 @@ function App() {
                     <span className="photo-side__spark photo-side__spark--two" aria-hidden="true">✧</span>
                   </div>
                   <div className="photo-side__copy">
-                    <p className="card-recipient">a day to celebrate you</p>
-                    <h2>Happy 20th Birthday!</h2>
-                    <p>Wishing you a day full of joy, love &amp; a little magic.</p>
+                    <p className="card-recipient">✦ MADE JUST FOR YOU ✦</p>
+                    <h2>For you, birthday girl. ♡</h2>
+                    <p className="photocard-description">I made this little surprise hoping it'd make you smile.</p>
+                    <p className="photocard-description">Hope you have the loveliest day. 💙</p>
                   </div>
                   <button className="text-button" type="button" onClick={() => setCardSide('letter')}>
-                    Read the letter <span aria-hidden="true">↗</span>
+                    Read your letter <span aria-hidden="true">↗</span>
                   </button>
                 </div>
               ) : (
