@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import dominikaPhoto from './assets/dominika.jpg'
+import birthdayEnvelope from './assets/birthday-envelope.png'
 import birthdayPoster from './assets/dominika-birthday-poster.png'
 import './App.css'
 
@@ -513,20 +514,13 @@ function App() {
               disabled={giftOpening || exiting}
               aria-label="Open Dominika's birthday letter"
             >
+              <span className="gift-envelope__card" aria-hidden="true">
+                <span className="gift-envelope__card-to">For Dominika</span>
+                <span className="gift-envelope__card-message">A little birthday wish</span>
+              </span>
+              <img className="gift-envelope__art" src={birthdayEnvelope} alt="" draggable={false} />
               <span className="gift-envelope__spark gift-envelope__spark--one" aria-hidden="true">✦</span>
               <span className="gift-envelope__spark gift-envelope__spark--two" aria-hidden="true">✧</span>
-              <span className="gift-envelope__letter" aria-hidden="true">
-                <span className="gift-envelope__letter-to">For Dominika</span>
-                <span className="gift-envelope__letter-title">A little birthday<br />surprise inside</span>
-                <span className="gift-envelope__letter-heart">♥</span>
-              </span>
-              <span className="gift-envelope__body" aria-hidden="true">
-                <span className="gift-envelope__fold gift-envelope__fold--left" />
-                <span className="gift-envelope__fold gift-envelope__fold--right" />
-                <span className="gift-envelope__pocket" />
-                <span className="gift-envelope__flap" />
-                <span className="gift-envelope__seal">♥</span>
-              </span>
             </button>
             <p className="arrival-copy">Tap the envelope to open your birthday card.</p>
             <button className="primary-button" type="button" onClick={openCard} disabled={giftOpening || exiting}>
@@ -546,24 +540,6 @@ function App() {
                 <button className="reader-edit" type="button" onClick={openEditor}>Edit photo and music</button>
               </div>
               <h1 ref={sceneHeadingRef} tabIndex={-1}>Happy 20th, Dominika.</h1>
-            </div>
-            <div className="card-side-switch" aria-label="Choose a side of the card">
-              <button
-                className={cardSide === 'photo' ? 'is-selected' : ''}
-                type="button"
-                aria-pressed={cardSide === 'photo'}
-                onClick={() => setCardSide('photo')}
-              >
-                Photo
-              </button>
-              <button
-                className={cardSide === 'letter' ? 'is-selected' : ''}
-                type="button"
-                aria-pressed={cardSide === 'letter'}
-                onClick={() => setCardSide('letter')}
-              >
-                Letter
-              </button>
             </div>
             <article
               className={`birthday-card birthday-card--${cardSide}`}
@@ -623,7 +599,12 @@ function App() {
                     <div className="last-rule__friend"><TinyCakeFriend /></div>
                   </div>
                   <div className="letter-footer">
-                    <p>Made just for Dominika <span className="text-emoji">💗</span></p>
+                    <div className="letter-footer__note">
+                      <p>Made just for Dominika <span className="text-emoji">💗</span></p>
+                      <button className="text-button letter-back-link" type="button" onClick={() => setCardSide('photo')}>
+                        Back to photo <span aria-hidden="true">↗</span>
+                      </button>
+                    </div>
                     <button className="primary-button primary-button--small" onClick={() => moveTo('birthday')}>
                       One last thing <span aria-hidden="true">✦</span>
                     </button>
