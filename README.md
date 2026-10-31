@@ -4,7 +4,7 @@ A lightweight, three-scene birthday card built with React, TypeScript, Vite, CSS
 
 ## Customize the preview
 
-The card opens directly on its photo side. Choose **Edit photo and music** to select a photo and either choose an MP3, M4A, WAV, or OGG file up to 20 MB, or paste a Spotify track or podcast link. A local file is played as soon as the page loads when the browser allows it; if sound autoplay is blocked, press play in the player. Spotify playback is controlled by its own player. A Spotify podcast can start at a chosen second, but Spotify track embeds do not expose a supported custom start point. Use an audio file for a song excerpt. Photos and audio stay in the visitor's browser and reset when the tab reloads.
+The card opens directly on its photo side with Dominika's portrait included in the published page. Choose **Edit photo and music** to select a different photo and either choose an MP3, M4A, WAV, or OGG file up to 20 MB, or paste a Spotify track or podcast link. A local file is played as soon as the page loads when the browser allows it; if sound autoplay is blocked, press play in the player. Spotify playback is controlled by its own player. A Spotify podcast can start at a chosen second, but Spotify track embeds do not expose a supported custom start point. Use an audio file for a song excerpt. Photos and audio selected in the editor stay in the visitor's browser and reset when the tab reloads.
 
 ## Run locally
 

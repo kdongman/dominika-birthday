@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent } from 'react'
+import dominikaPhoto from './assets/dominika.jpg'
 import './App.css'
 
 type Scene = 'surprise' | 'message' | 'birthday'
@@ -381,6 +382,8 @@ function App() {
   const continueTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const photoUrl = useObjectUrl(photoFile)
   const draftPhotoUrl = useObjectUrl(draftPhotoFile)
+  const displayPhotoUrl = photoUrl ?? dominikaPhoto
+  const draftDisplayPhotoUrl = draftPhotoUrl ?? dominikaPhoto
   const musicUrl = useObjectUrl(musicFile)
   const draftMusicUrl = useObjectUrl(draftMusicFile)
   const spotifyContent = getSpotifyContent(spotifyLink)
@@ -567,23 +570,17 @@ function App() {
             <div
               className="cover-card"
               role="group"
-              aria-label={photoUrl ? 'Birthday card photo for Dominika' : 'Illustrated birthday card for Dominika'}
+              aria-label="Birthday card photo for Dominika"
             >
               <div className="cover-card__art">
-                {photoUrl ? (
-                  <img
-                    className="card-photo"
-                    src={photoUrl}
-                    alt="Selected birthday card photo"
-                    style={{ objectPosition: `${photoPosition.x}% ${photoPosition.y}%` }}
-                  />
-                ) : (
-                  <>
-                    <TinyCakeFriend />
-                    <span className="cover-spark cover-spark--one" aria-hidden="true">✦</span>
-                    <span className="cover-spark cover-spark--two" aria-hidden="true">✧</span>
-                  </>
-                )}
+                <img
+                  className="card-photo"
+                  src={displayPhotoUrl}
+                  alt="Dominika in her birthday portrait"
+                  style={{ objectPosition: `${photoPosition.x}% ${photoPosition.y}%` }}
+                />
+                <span className="cover-birthday-ribbon" aria-hidden="true">✦ HAPPY BIRTHDAY ✦</span>
+                <span className="cover-birthday-seal" aria-hidden="true">🎂</span>
               </div>
               <div className="cover-card__copy">
                 <p>made for Dominika</p>
@@ -635,25 +632,21 @@ function App() {
               {cardSide === 'photo' ? (
                 <div className="photo-side">
                   <div className="photo-side__art">
-                    {photoUrl ? (
-                      <img
-                        className="card-photo"
-                        src={photoUrl}
-                        alt="Selected birthday card photo"
-                        style={{ objectPosition: `${photoPosition.x}% ${photoPosition.y}%` }}
-                      />
-                    ) : (
-                      <>
-                        <TinyCakeFriend />
-                        <span className="cover-spark cover-spark--one" aria-hidden="true">✦</span>
-                        <span className="cover-spark cover-spark--two" aria-hidden="true">✧</span>
-                      </>
-                    )}
+                    <img
+                      className="card-photo"
+                      src={displayPhotoUrl}
+                      alt="Dominika in her birthday portrait"
+                      style={{ objectPosition: `${photoPosition.x}% ${photoPosition.y}%` }}
+                    />
+                    <span className="photo-side__ribbon" aria-hidden="true">✦ HAPPY BIRTHDAY ✦</span>
+                    <span className="photo-side__sticker" aria-hidden="true">🎂</span>
+                    <span className="photo-side__spark photo-side__spark--one" aria-hidden="true">✦</span>
+                    <span className="photo-side__spark photo-side__spark--two" aria-hidden="true">✧</span>
                   </div>
                   <div className="photo-side__copy">
-                    <p className="card-recipient">for Dominika</p>
+                    <p className="card-recipient">a day to celebrate you</p>
                     <h2>Happy 20th Birthday!</h2>
-                    <p>A little something, made just for you.</p>
+                    <p>Wishing you a day full of joy, love &amp; a little magic.</p>
                   </div>
                   <button className="text-button" type="button" onClick={() => setCardSide('letter')}>
                     Read the letter <span aria-hidden="true">↗</span>
@@ -809,16 +802,12 @@ function App() {
                 <span>선택</span>
               </div>
               <div className="editor-photo-preview">
-                {draftPhotoUrl ? (
-                  <img
-                    className="card-photo"
-                    src={draftPhotoUrl}
-                    alt="선택한 카드 사진 미리보기"
-                    style={{ objectPosition: `${draftPhotoPosition.x}% ${draftPhotoPosition.y}%` }}
-                  />
-                ) : (
-                  <TinyCakeFriend />
-                )}
+                <img
+                  className="card-photo"
+                  src={draftDisplayPhotoUrl}
+                  alt="카드 앞면 사진 미리보기"
+                  style={{ objectPosition: `${draftPhotoPosition.x}% ${draftPhotoPosition.y}%` }}
+                />
               </div>
               <label className="visually-hidden" htmlFor="card-photo-file">카드 앞면 사진 선택</label>
               <input
@@ -829,7 +818,7 @@ function App() {
                 aria-describedby="photo-file-hint"
                 onChange={choosePhoto}
               />
-              <p id="photo-file-hint" className="editor-hint">사진이 없으면 기본 일러스트를 사용해요. JPG, PNG 등 이미지 파일, 최대 10MB.</p>
+              <p id="photo-file-hint" className="editor-hint">Dominika의 사진을 기본으로 넣었어요. 다른 사진으로 바꿀 수 있어요. JPG, PNG 등 최대 10MB.</p>
               {draftPhotoFile && (
                 <button
                   className="editor-text-button"
@@ -839,7 +828,7 @@ function App() {
                     setDraftPhotoPosition({ x: 50, y: 50 })
                   }}
                 >
-                  기본 일러스트로 바꾸기
+                  기본 사진으로 돌아가기
                 </button>
               )}
               {draftPhotoFile && (
@@ -982,7 +971,7 @@ function App() {
             </section>
           </div>
 
-          <p className="editor-privacy-note">사진과 음악은 이 브라우저 미리보기에만 적용돼요. 새로고침하면 초기화되고, 공유 카드에서는 음원이 재생되지 않아요.</p>
+          <p className="editor-privacy-note">선택한 사진과 음악은 이 브라우저 미리보기에만 적용돼요. 기본 사진은 사이트에 포함되어 누구나 볼 수 있어요. 새로고침하면 선택한 사진과 음악은 초기화돼요.</p>
           <footer className="card-editor__footer">
             <button className="editor-cancel" type="button" onClick={closeEditor}>취소</button>
             <button className="primary-button primary-button--small" type="submit">미리보기에 적용</button>
