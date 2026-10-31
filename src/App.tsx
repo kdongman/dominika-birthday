@@ -5,7 +5,7 @@ import './App.css'
 
 type Scene = 'surprise' | 'message' | 'birthday'
 type CardSide = 'photo' | 'letter'
-type MusicMode = 'file' | 'spotify'
+type MusicMode = 'none' | 'file' | 'spotify'
 type SpotifyContent = {
   kind: 'track' | 'episode'
   id: string
@@ -30,6 +30,20 @@ function getInitialLetterMessage() {
     return window.localStorage.getItem(LETTER_STORAGE_KEY) ?? DEFAULT_LETTER_MESSAGE
   } catch {
     return DEFAULT_LETTER_MESSAGE
+  }
+}
+
+function getInitialCardMusic() {
+  const searchParams = new URLSearchParams(window.location.search)
+  const spotifyLink = searchParams.get('song') ?? ''
+  const requestedStartAt = Number(searchParams.get('songStartAt') ?? 0)
+
+  return {
+    mode: spotifyLink ? 'spotify' as const : 'none' as const,
+    spotifyLink,
+    spotifyStartAt: Number.isInteger(requestedStartAt) && requestedStartAt >= 0 && requestedStartAt <= 86400
+      ? requestedStartAt
+      : 0,
   }
 }
 
@@ -298,6 +312,7 @@ function CakeScene({
 }
 
 function App() {
+  const [initialCardMusic] = useState(getInitialCardMusic)
   const [scene, setScene] = useState<Scene>('surprise')
   const [exiting, setExiting] = useState(false)
   const [giftOpening, setGiftOpening] = useState(false)
@@ -309,12 +324,12 @@ function App() {
   const [draftPhotoFile, setDraftPhotoFile] = useState<File | null>(null)
   const [musicFile, setMusicFile] = useState<File | null>(null)
   const [draftMusicFile, setDraftMusicFile] = useState<File | null>(null)
-  const [musicMode, setMusicMode] = useState<MusicMode>('file')
-  const [draftMusicMode, setDraftMusicMode] = useState<MusicMode>('file')
-  const [spotifyLink, setSpotifyLink] = useState('')
-  const [spotifyDraft, setSpotifyDraft] = useState('')
-  const [spotifyStartAt, setSpotifyStartAt] = useState(0)
-  const [spotifyStartAtDraft, setSpotifyStartAtDraft] = useState('0')
+  const [musicMode, setMusicMode] = useState<MusicMode>(initialCardMusic.mode)
+  const [draftMusicMode, setDraftMusicMode] = useState<MusicMode>(initialCardMusic.mode)
+  const [spotifyLink, setSpotifyLink] = useState(initialCardMusic.spotifyLink)
+  const [spotifyDraft, setSpotifyDraft] = useState(initialCardMusic.spotifyLink)
+  const [spotifyStartAt, setSpotifyStartAt] = useState(initialCardMusic.spotifyStartAt)
+  const [spotifyStartAtDraft, setSpotifyStartAtDraft] = useState(String(initialCardMusic.spotifyStartAt))
   const [playbackHint, setPlaybackHint] = useState('')
   const [photoPosition, setPhotoPosition] = useState({ x: 50, y: 50 })
   const [draftPhotoPosition, setDraftPhotoPosition] = useState({ x: 50, y: 50 })
@@ -343,7 +358,7 @@ function App() {
   const draftMusicUrl = useObjectUrl(draftMusicFile)
   const spotifyContent = getSpotifyContent(spotifyLink)
   const spotifyDraftContent = getSpotifyContent(spotifyDraft)
-  const hasMusic = musicMode === 'file' ? Boolean(musicUrl) : Boolean(spotifyContent)
+  const hasMusic = musicMode === 'file' ? Boolean(musicUrl) : musicMode === 'spotify' && Boolean(spotifyContent)
   const letterParagraphs = letterMessage.trim().split(/\n\s*\n+/).map((paragraph) => paragraph.trim()).filter(Boolean)
 
   useEffect(() => {
@@ -445,6 +460,7 @@ function App() {
   const saveEditor = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     draftAudioRef.current?.pause()
+    audioRef.current?.pause()
     const nextSpotifyLink = spotifyDraft.trim()
     const nextSpotifyContent = getSpotifyContent(nextSpotifyLink)
     const nextStartAt = Number(spotifyStartAtDraft)
@@ -466,10 +482,11 @@ function App() {
     }
 
     setPhotoFile(draftPhotoFile)
-    setMusicMode(draftMusicMode)
-    setMusicFile(draftMusicMode === 'file' ? draftMusicFile : null)
-    setSpotifyLink(draftMusicMode === 'spotify' ? nextSpotifyLink : '')
-    setSpotifyStartAt(draftMusicMode === 'spotify' && nextSpotifyContent?.kind === 'episode' ? nextStartAt : 0)
+    const nextMusicMode = draftMusicMode === 'file' && !draftMusicFile ? 'none' : draftMusicMode
+    setMusicMode(nextMusicMode)
+    setMusicFile(nextMusicMode === 'file' ? draftMusicFile : null)
+    setSpotifyLink(nextMusicMode === 'spotify' ? nextSpotifyLink : '')
+    setSpotifyStartAt(nextMusicMode === 'spotify' && nextSpotifyContent?.kind === 'episode' ? nextStartAt : 0)
     setPhotoPosition(draftPhotoPosition)
     setLetterMessage(nextLetterMessage)
     try {
@@ -489,12 +506,37 @@ function App() {
       return
     }
 
+    const nextSpotifyLink = spotifyDraft.trim()
+    const nextSpotifyContent = getSpotifyContent(nextSpotifyLink)
+    const nextStartAt = Number(spotifyStartAtDraft)
+    if (draftMusicMode === 'spotify' && nextSpotifyLink && !nextSpotifyContent) {
+      setEditorError('Spotify 곡 또는 팟캐스트 링크를 확인해 주세요. open.spotify.com의 공유 링크를 붙여 넣어 주세요.')
+      return
+    }
+    if (draftMusicMode === 'spotify' && nextSpotifyContent?.kind === 'episode'
+      && (!Number.isInteger(nextStartAt) || nextStartAt < 0 || nextStartAt > 86400)) {
+      setEditorError('팟캐스트 시작 지점은 0초부터 86,400초 사이의 정수로 입력해 주세요.')
+      return
+    }
+
     const personalizedUrl = new URL(window.location.href)
     personalizedUrl.searchParams.set('letter', message)
+    personalizedUrl.searchParams.delete('song')
+    personalizedUrl.searchParams.delete('songStartAt')
+    if (draftMusicMode === 'spotify' && nextSpotifyContent) {
+      personalizedUrl.searchParams.set('song', nextSpotifyLink)
+      if (nextSpotifyContent.kind === 'episode' && nextStartAt > 0) {
+        personalizedUrl.searchParams.set('songStartAt', String(nextStartAt))
+      }
+    }
     try {
       await navigator.clipboard.writeText(personalizedUrl.toString())
       setEditorError('')
-      setLetterShareStatus('편지 문구가 들어간 링크를 복사했어요. 이 링크를 열면 같은 문구가 보여요.')
+      setLetterShareStatus(draftMusicMode === 'spotify' && nextSpotifyContent
+        ? '편지와 Spotify 노래가 들어간 링크를 복사했어요.'
+        : draftMusicMode === 'file' && draftMusicFile
+          ? '편지 링크를 복사했어요. 선택한 음악 파일은 이 브라우저에서만 재생돼요.'
+          : '편지 문구를 담은 링크를 복사했어요. 노래는 추가되지 않은 상태예요.')
     } catch {
       setLetterShareStatus('링크를 복사하지 못했어요. 브라우저 주소창의 사이트 주소를 확인해 주세요.')
     }
@@ -858,14 +900,30 @@ function App() {
             <section className="editor-song" aria-labelledby="editor-song-title">
               <div className="editor-section-heading">
                 <h3 id="editor-song-title">함께 들을 노래</h3>
-                <span>선택</span>
+                <span>선택 사항</span>
               </div>
               <div className="music-source-switch" role="group" aria-label="음악 선택 방식">
+                <button
+                  className={draftMusicMode === 'none' ? 'is-selected' : ''}
+                  type="button"
+                  aria-pressed={draftMusicMode === 'none'}
+                  onClick={() => {
+                    draftAudioRef.current?.pause()
+                    audioRef.current?.pause()
+                    setDraftMusicMode('none')
+                    setPlaybackHint('')
+                  }}
+                >
+                  없음
+                </button>
                 <button
                   className={draftMusicMode === 'file' ? 'is-selected' : ''}
                   type="button"
                   aria-pressed={draftMusicMode === 'file'}
-                  onClick={() => setDraftMusicMode('file')}
+                  onClick={() => {
+                    draftAudioRef.current?.pause()
+                    setDraftMusicMode('file')
+                  }}
                 >
                   파일
                 </button>
@@ -873,12 +931,17 @@ function App() {
                   className={draftMusicMode === 'spotify' ? 'is-selected' : ''}
                   type="button"
                   aria-pressed={draftMusicMode === 'spotify'}
-                  onClick={() => setDraftMusicMode('spotify')}
+                  onClick={() => {
+                    draftAudioRef.current?.pause()
+                    setDraftMusicMode('spotify')
+                  }}
                 >
                   Spotify
                 </button>
               </div>
-              {draftMusicMode === 'file' ? (
+              {draftMusicMode === 'none' ? (
+                <p className="editor-hint editor-no-song">노래 없이 카드만 보내도 괜찮아요. 원하면 파일이나 Spotify 곡을 추가할 수 있어요.</p>
+              ) : draftMusicMode === 'file' ? (
                 <>
                   <label className="editor-label" htmlFor="birthday-song-file">음악 파일</label>
                   <input
@@ -969,7 +1032,7 @@ function App() {
           </div>
 
           {editorError && <p className="editor-error" role="alert">{editorError}</p>}
-          <p className="editor-privacy-note">사진과 음악은 이 브라우저 미리보기에만 적용돼요. 편지 문구는 이 브라우저에 저장되고, 링크에 담아 공유할 수도 있어요.</p>
+          <p className="editor-privacy-note">사진과 음악 파일은 이 브라우저 미리보기에만 적용돼요. 편지 내용과 Spotify 링크는 개인화 링크에 담아 공유할 수 있어요.</p>
           <footer className="card-editor__footer">
             <button className="editor-cancel" type="button" onClick={closeEditor}>취소</button>
             <button className="primary-button primary-button--small" type="submit">미리보기에 적용</button>
