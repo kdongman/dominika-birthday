@@ -21,6 +21,7 @@ const DEFAULT_LETTER_MESSAGE = [
 ].join('\n\n')
 const LETTER_STORAGE_KEY = 'dominika-birthday-letter-message'
 const LETTER_MAX_LENGTH = 1200
+let birthdayPosterLoad: Promise<void> | null = null
 
 function getInitialLetterMessage() {
   const sharedMessage = new URLSearchParams(window.location.search).get('letter')
@@ -45,6 +46,37 @@ function getInitialCardMusic() {
       ? requestedStartAt
       : 0,
   }
+}
+
+function preloadBirthdayPoster() {
+  if (!birthdayPosterLoad) {
+    birthdayPosterLoad = new Promise((resolve) => {
+      const poster = new Image()
+      let settled = false
+      const finish = () => {
+        if (settled) return
+        settled = true
+        resolve()
+      }
+      const decode = () => {
+        if (typeof poster.decode === 'function') {
+          void poster.decode().then(finish, finish)
+        } else {
+          finish()
+        }
+      }
+
+      poster.onload = decode
+      poster.onerror = finish
+      poster.src = birthdayPoster
+      if (poster.complete) {
+        if (poster.naturalWidth > 0) decode()
+        else finish()
+      }
+    })
+  }
+
+  return birthdayPosterLoad
 }
 
 type SpotifyEmbedController = {
@@ -266,31 +298,42 @@ function CakeScene({
   resetWish: () => void
   onSeeCard: () => void
 }) {
+  const [posterReady, setPosterReady] = useState(false)
+
   return (
-    <div className={`birthday-content${extinguished ? ' birthday-content--extinguished' : ''}`}>
-      <img className="birthday-poster" src={birthdayPoster} alt="Wait, there's one more thing. Make a wish, then tap a candle. Tap either candle to blow it out." />
-      <svg className="poster-flame poster-flame--two" viewBox="0 0 32 54" aria-hidden="true">
-        <path className="poster-flame__glow" d="M16 1C14 14 2 23 3 37c1 10 6 15 13 15s12-5 13-15C30 23 18 14 16 1Z" />
-        <path className="poster-flame__core" d="M16 17c-2 8-7 13-6 21 0 5 2 8 6 8s6-3 6-8c1-8-4-13-6-21Z" />
-      </svg>
-      <svg className="poster-flame poster-flame--zero" viewBox="0 0 32 54" aria-hidden="true">
-        <path className="poster-flame__glow" d="M16 1C14 14 2 23 3 37c1 10 6 15 13 15s12-5 13-15C30 23 18 14 16 1Z" />
-        <path className="poster-flame__core" d="M16 17c-2 8-7 13-6 21 0 5 2 8 6 8s6-3 6-8c1-8-4-13-6-21Z" />
-      </svg>
-      <svg className="poster-smoke poster-smoke--two" viewBox="0 0 36 72" aria-hidden="true"><path d="M19 67c-18-14 18-20 1-35S25 10 16 3" /></svg>
-      <svg className="poster-smoke poster-smoke--zero" viewBox="0 0 36 72" aria-hidden="true"><path d="M19 67c-18-14 18-20 1-35S25 10 16 3" /></svg>
+    <div className={`birthday-content${posterReady ? ' birthday-content--poster-ready' : ''}${extinguished ? ' birthday-content--extinguished' : ''}`}>
+      <img
+        className="birthday-poster"
+        src={birthdayPoster}
+        alt="Wait, there's one more thing. Make a wish, then tap a candle. Tap either candle to blow it out."
+        onLoad={() => setPosterReady(true)}
+      />
+      {posterReady && (
+        <>
+          <svg className="poster-flame poster-flame--two" viewBox="0 0 32 54" aria-hidden="true">
+            <path className="poster-flame__glow" d="M16 1C14 14 2 23 3 37c1 10 6 15 13 15s12-5 13-15C30 23 18 14 16 1Z" />
+            <path className="poster-flame__core" d="M16 17c-2 8-7 13-6 21 0 5 2 8 6 8s6-3 6-8c1-8-4-13-6-21Z" />
+          </svg>
+          <svg className="poster-flame poster-flame--zero" viewBox="0 0 32 54" aria-hidden="true">
+            <path className="poster-flame__glow" d="M16 1C14 14 2 23 3 37c1 10 6 15 13 15s12-5 13-15C30 23 18 14 16 1Z" />
+            <path className="poster-flame__core" d="M16 17c-2 8-7 13-6 21 0 5 2 8 6 8s6-3 6-8c1-8-4-13-6-21Z" />
+          </svg>
+          <svg className="poster-smoke poster-smoke--two" viewBox="0 0 36 72" aria-hidden="true"><path d="M19 67c-18-14 18-20 1-35S25 10 16 3" /></svg>
+          <svg className="poster-smoke poster-smoke--zero" viewBox="0 0 36 72" aria-hidden="true"><path d="M19 67c-18-14 18-20 1-35S25 10 16 3" /></svg>
+        </>
+      )}
       <button
         className="poster-candle-hit poster-candle-hit--two"
         onClick={onBlowOut}
         aria-label={`Number 2 candle ${extinguished ? 'is out' : 'is lit'}`}
-        disabled={extinguished}
+        disabled={!posterReady || extinguished}
       >
       </button>
       <button
         className="poster-candle-hit poster-candle-hit--zero"
         onClick={onBlowOut}
         aria-label={`Number 0 candle ${extinguished ? 'is out' : 'is lit'}`}
-        disabled={extinguished}
+        disabled={!posterReady || extinguished}
       >
       </button>
       {wishVisible && (
@@ -371,6 +414,10 @@ function App() {
   useEffect(() => {
     if (scene === 'message' && giftOpening) setGiftOpening(false)
   }, [scene, giftOpening])
+
+  useEffect(() => {
+    if (scene === 'message') void preloadBirthdayPoster()
+  }, [scene])
 
   useEffect(() => {
     const dialog = editorDialogRef.current
@@ -596,6 +643,11 @@ function App() {
     giftOpenTimer.current = setTimeout(() => moveTo('message'), 580)
   }
 
+  const openBirthdayScene = async () => {
+    await preloadBirthdayPoster()
+    moveTo('birthday')
+  }
+
   return (
     <main className="experience">
       <StarField />
@@ -714,7 +766,7 @@ function App() {
                         Back to photo <span aria-hidden="true">↗</span>
                       </button>
                     </div>
-                    <button className="primary-button primary-button--small" onClick={() => moveTo('birthday')}>
+                    <button className="primary-button primary-button--small" onClick={() => { void openBirthdayScene() }}>
                       One last thing <span aria-hidden="true">✦</span>
                     </button>
                   </div>
