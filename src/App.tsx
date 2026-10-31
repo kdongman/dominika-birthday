@@ -13,6 +13,26 @@ type SpotifyContent = {
   embedUrl: string
 }
 
+const DEFAULT_LETTER_MESSAGE = [
+  'I wanted to make you something a little different instead of just sending a birthday message.',
+  'I hope this new chapter brings you beautiful memories, unexpected adventures, lots of laughter, and plenty of reasons to smile.',
+  'And I hope this little surprise made you smile too. :)',
+  'Enjoy your day, birthday girl! ✨',
+].join('\n\n')
+const LETTER_STORAGE_KEY = 'dominika-birthday-letter-message'
+const LETTER_MAX_LENGTH = 1200
+
+function getInitialLetterMessage() {
+  const sharedMessage = new URLSearchParams(window.location.search).get('letter')
+  if (sharedMessage?.trim()) return sharedMessage.slice(0, LETTER_MAX_LENGTH)
+
+  try {
+    return window.localStorage.getItem(LETTER_STORAGE_KEY) ?? DEFAULT_LETTER_MESSAGE
+  } catch {
+    return DEFAULT_LETTER_MESSAGE
+  }
+}
+
 type SpotifyEmbedController = {
   addListener: (event: string, listener: () => void) => void
   destroy: () => void
@@ -298,11 +318,15 @@ function App() {
   const [playbackHint, setPlaybackHint] = useState('')
   const [photoPosition, setPhotoPosition] = useState({ x: 50, y: 50 })
   const [draftPhotoPosition, setDraftPhotoPosition] = useState({ x: 50, y: 50 })
+  const [letterMessage, setLetterMessage] = useState(getInitialLetterMessage)
+  const [draftLetterMessage, setDraftLetterMessage] = useState(letterMessage)
+  const [letterShareStatus, setLetterShareStatus] = useState('')
   const [editorOpen, setEditorOpen] = useState(false)
   const [editorError, setEditorError] = useState('')
   const sceneHeadingRef = useRef<HTMLHeadingElement>(null)
   const editorDialogRef = useRef<HTMLDialogElement>(null)
   const musicInputRef = useRef<HTMLInputElement>(null)
+  const letterInputRef = useRef<HTMLTextAreaElement>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
   const draftAudioRef = useRef<HTMLAudioElement>(null)
   const currentSceneRef = useRef<Scene>('surprise')
@@ -320,6 +344,7 @@ function App() {
   const spotifyContent = getSpotifyContent(spotifyLink)
   const spotifyDraftContent = getSpotifyContent(spotifyDraft)
   const hasMusic = musicMode === 'file' ? Boolean(musicUrl) : Boolean(spotifyContent)
+  const letterParagraphs = letterMessage.trim().split(/\n\s*\n+/).map((paragraph) => paragraph.trim()).filter(Boolean)
 
   useEffect(() => {
     if (currentSceneRef.current !== scene) {
@@ -338,7 +363,7 @@ function App() {
 
     if (editorOpen && !dialog.open) {
       dialog.showModal()
-      requestAnimationFrame(() => musicInputRef.current?.focus())
+      requestAnimationFrame(() => letterInputRef.current?.focus())
     } else if (!editorOpen && dialog.open) {
       dialog.close()
     }
@@ -397,6 +422,8 @@ function App() {
     setSpotifyDraft(musicMode === 'spotify' ? spotifyLink : '')
     setSpotifyStartAtDraft(String(spotifyStartAt))
     setDraftPhotoPosition(photoPosition)
+    setDraftLetterMessage(letterMessage)
+    setLetterShareStatus('')
     setEditorError('')
     setEditorOpen(true)
   }
@@ -409,6 +436,8 @@ function App() {
     setSpotifyDraft(musicMode === 'spotify' ? spotifyLink : '')
     setSpotifyStartAtDraft(String(spotifyStartAt))
     setDraftPhotoPosition(photoPosition)
+    setDraftLetterMessage(letterMessage)
+    setLetterShareStatus('')
     setEditorError('')
     setEditorOpen(false)
   }
@@ -419,6 +448,12 @@ function App() {
     const nextSpotifyLink = spotifyDraft.trim()
     const nextSpotifyContent = getSpotifyContent(nextSpotifyLink)
     const nextStartAt = Number(spotifyStartAtDraft)
+    const nextLetterMessage = draftLetterMessage.trim()
+
+    if (!nextLetterMessage) {
+      setEditorError('편지 내용을 입력해 주세요.')
+      return
+    }
 
     if (draftMusicMode === 'spotify' && nextSpotifyLink && !nextSpotifyContent) {
       setEditorError('Spotify 곡 또는 팟캐스트 링크를 확인해 주세요. open.spotify.com의 공유 링크를 붙여 넣어 주세요.')
@@ -436,9 +471,33 @@ function App() {
     setSpotifyLink(draftMusicMode === 'spotify' ? nextSpotifyLink : '')
     setSpotifyStartAt(draftMusicMode === 'spotify' && nextSpotifyContent?.kind === 'episode' ? nextStartAt : 0)
     setPhotoPosition(draftPhotoPosition)
+    setLetterMessage(nextLetterMessage)
+    try {
+      window.localStorage.setItem(LETTER_STORAGE_KEY, nextLetterMessage)
+    } catch {
+      // The letter still updates for this visit when browser storage is unavailable.
+    }
     setPlaybackHint('')
     setEditorError('')
     setEditorOpen(false)
+  }
+
+  const copyPersonalizedLetterLink = async () => {
+    const message = draftLetterMessage.trim()
+    if (!message) {
+      setEditorError('편지 내용을 입력해 주세요.')
+      return
+    }
+
+    const personalizedUrl = new URL(window.location.href)
+    personalizedUrl.searchParams.set('letter', message)
+    try {
+      await navigator.clipboard.writeText(personalizedUrl.toString())
+      setEditorError('')
+      setLetterShareStatus('편지 문구가 들어간 링크를 복사했어요. 이 링크를 열면 같은 문구가 보여요.')
+    } catch {
+      setLetterShareStatus('링크를 복사하지 못했어요. 브라우저 주소창의 사이트 주소를 확인해 주세요.')
+    }
   }
 
   const choosePhoto = (event: ChangeEvent<HTMLInputElement>) => {
@@ -534,7 +593,7 @@ function App() {
               Open your letter <span aria-hidden="true">↗</span>
             </button>
             <button className="editor-trigger" type="button" onClick={openEditor}>
-              Customize photo and music
+              Customize your card
             </button>
           </div>
         )}
@@ -544,7 +603,7 @@ function App() {
             <div className="reader-heading">
               <div className="reader-heading__topline">
                 <p className="eyebrow">a birthday card for you</p>
-                <button className="reader-edit" type="button" onClick={openEditor}>Edit photo and music</button>
+                <button className="reader-edit" type="button" onClick={openEditor}>Edit card</button>
               </div>
               <h1 ref={sceneHeadingRef} tabIndex={-1}>Happy 20th, Dominika.</h1>
             </div>
@@ -580,10 +639,11 @@ function App() {
                   <p className="letter-kicker">for your 20th birthday</p>
                   <h2>Happy Birthday,<br /><span>Dominika!</span> <span className="text-emoji">💗</span></h2>
                   <div className="letter-body">
-                    <p>I wanted to make you something a little different instead of just sending a birthday message.</p>
-                    <p>I hope this new chapter brings you beautiful memories, unexpected adventures, lots of laughter, and plenty of reasons to smile.</p>
-                    <p>And I hope this little surprise made you smile too. :)</p>
-                    <p className="letter-wish">Enjoy your day, birthday girl! <span className="text-emoji">✨</span></p>
+                    {letterParagraphs.map((paragraph, index) => (
+                      <p className={index === letterParagraphs.length - 1 ? 'letter-wish' : undefined} key={`${index}-${paragraph}`}>
+                        {paragraph}
+                      </p>
+                    ))}
                   </div>
                   <div className="music-note" role="note">
                     <span className="music-note__symbol" aria-hidden="true">♪</span>
@@ -689,10 +749,49 @@ function App() {
           <header className="card-editor__header">
             <div>
               <p className="editor-eyebrow">BIRTHDAY CARD</p>
-              <h2 id="card-editor-title">사진과 노래 고르기</h2>
+              <h2 id="card-editor-title">카드 편집</h2>
             </div>
             <button className="editor-close" type="button" onClick={closeEditor} aria-label="편집 닫기">×</button>
           </header>
+
+          <section className="editor-letter" aria-labelledby="editor-letter-title">
+            <div className="editor-section-heading">
+              <h3 id="editor-letter-title">편지 내용</h3>
+              <span>직접 수정</span>
+            </div>
+            <label className="visually-hidden" htmlFor="birthday-letter-message">편지 내용 수정</label>
+            <textarea
+              ref={letterInputRef}
+              id="birthday-letter-message"
+              className="editor-textarea"
+              value={draftLetterMessage}
+              maxLength={LETTER_MAX_LENGTH}
+              rows={6}
+              aria-describedby="letter-message-hint"
+              onChange={(event) => {
+                setDraftLetterMessage(event.currentTarget.value)
+                setLetterShareStatus('')
+                setEditorError('')
+              }}
+            />
+            <div className="editor-letter-meta">
+              <p id="letter-message-hint" className="editor-hint">빈 줄을 넣으면 문단이 나뉘어요. 저장하면 이 브라우저에 기억돼요.</p>
+              <span>{draftLetterMessage.length}/{LETTER_MAX_LENGTH}</span>
+            </div>
+            <div className="editor-letter-actions">
+              <button className="editor-text-button" type="button" onClick={() => {
+                setDraftLetterMessage(DEFAULT_LETTER_MESSAGE)
+                setLetterShareStatus('')
+                setEditorError('')
+              }}>
+                기본 문구로 되돌리기
+              </button>
+              <button className="editor-share-link" type="button" onClick={() => { void copyPersonalizedLetterLink() }}>
+                내 편지 링크 복사
+              </button>
+            </div>
+            {letterShareStatus && <p className="editor-share-status" role="status">{letterShareStatus}</p>}
+          </section>
 
           <div className="card-editor__body">
             <section className="editor-photo" aria-labelledby="editor-photo-title">
@@ -866,11 +965,11 @@ function App() {
                   )}
                 </>
               )}
-              {editorError && <p className="editor-error" role="alert">{editorError}</p>}
             </section>
           </div>
 
-          <p className="editor-privacy-note">선택한 사진과 음악은 이 브라우저 미리보기에만 적용돼요. 기본 사진은 사이트에 포함되어 누구나 볼 수 있어요. 새로고침하면 선택한 사진과 음악은 초기화돼요.</p>
+          {editorError && <p className="editor-error" role="alert">{editorError}</p>}
+          <p className="editor-privacy-note">사진과 음악은 이 브라우저 미리보기에만 적용돼요. 편지 문구는 이 브라우저에 저장되고, 링크에 담아 공유할 수도 있어요.</p>
           <footer className="card-editor__footer">
             <button className="editor-cancel" type="button" onClick={closeEditor}>취소</button>
             <button className="primary-button primary-button--small" type="submit">미리보기에 적용</button>
