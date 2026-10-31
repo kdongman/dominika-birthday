@@ -304,7 +304,7 @@ function App() {
   const musicInputRef = useRef<HTMLInputElement>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
   const draftAudioRef = useRef<HTMLAudioElement>(null)
-  const currentSceneRef = useRef<Scene>('surprise')
+  const currentSceneRef = useRef<Scene>('message')
   const hasBlownOutRef = useRef(false)
   const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const wishTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
