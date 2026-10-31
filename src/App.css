@@ -471,109 +471,52 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 .letter-footer .primary-button { border-color: rgba(255, 255, 255, .6); background: #bb5d70; box-shadow: 0 8px 21px rgba(141, 66, 83, .18); }
 .letter-footer .primary-button:hover { background: #a94d62; box-shadow: 0 12px 26px rgba(141, 66, 83, .24); }
 
-.birthday-content {
-  display: flex;
-  flex-direction: column;
+.scene--birthday { overflow: hidden; padding: 0; }
+.scene--birthday.scene--with-music { display: grid; place-items: center; overflow-y: auto; padding: 0; }
+.scene--birthday .birthday-content {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(100%, 440px, calc(100dvh * .46));
+  aspect-ratio: 851 / 1850;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.birthday-poster { position: absolute; inset: 0; z-index: 0; display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; }
+.poster-flame { position: absolute; z-index: 1; top: 48.45%; width: 4%; height: 4.35%; overflow: visible; transform-origin: 50% 100%; animation: posterFlameDance .82s ease-in-out infinite alternate; filter: drop-shadow(0 0 7px rgba(255, 153, 75, .85)); pointer-events: none; }
+.poster-flame--two { left: 42.2%; }
+.poster-flame--zero { left: 58%; animation-delay: -.38s; }
+.poster-flame__glow { fill: #ffae53; }
+.poster-flame__core { fill: #fff4d4; }
+.birthday-content--extinguished .poster-flame { opacity: 0; transform: translateY(-8%) scale(.55); animation-play-state: paused; transition: opacity .28s ease, transform .38s ease; }
+.poster-smoke { position: absolute; z-index: 1; top: 46%; width: 4.5%; height: 7%; overflow: visible; fill: none; stroke: #dbe5f4; stroke-width: 2.2; stroke-linecap: round; opacity: 0; pointer-events: none; }
+.poster-smoke--two { left: 42%; }
+.poster-smoke--zero { left: 57.8%; animation-delay: .12s; }
+.birthday-content--extinguished .poster-smoke { animation: posterSmokeRise 1.4s ease-out both; }
+.poster-candle-hit { position: absolute; z-index: 2; top: 46.5%; width: 21%; height: 11%; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.poster-candle-hit--two { left: 33.5%; }
+.poster-candle-hit--zero { left: 49.5%; }
+.poster-candle-hit:focus-visible { outline: 2px solid rgba(211, 230, 255, .9); outline-offset: -5px; background: rgba(121, 184, 255, .12); }
+.poster-wish-copy { position: absolute; z-index: 3; top: 84%; left: 8%; width: 84%; padding: 6px 4px 8px; color: #f3f5fa; border-radius: 8px; background: rgba(8, 13, 25, .94); text-align: center; animation: noteArrive .65s ease both; }
+.poster-wish-copy .wish-question { margin: 0; font-family: var(--serif); font-size: clamp(15px, 4.4vw, 19px); }
+.poster-wish-copy .wish-response { margin: 4px 0 0; color: #b9d6fc; font-size: clamp(10px, 3vw, 12px); }
+.birthday-actions { position: absolute; z-index: 4; right: 0; bottom: 1.5%; left: 0; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.birthday-actions .primary-button--small { min-width: 0; min-height: 40px; padding: 0 12px; font-size: 11px; }
+.replay-button {
+  display: inline-flex;
   align-items: center;
-  transform: translateY(-2px);
-}
-
-.birthday-copy { text-align: center; }
-.birthday-copy .eyebrow { margin-bottom: 10px; }
-.birthday-copy h1 { max-width: 480px; margin: 0 auto; font-size: clamp(31px, 7.2vw, 43px); line-height: 1.06; letter-spacing: -.035em; }
-.make-wish { margin: 12px 0 0; color: #d9e8fb; font-family: var(--serif); font-size: 19px; }
-.make-wish span { color: #91c4ff; }
-
-.cake-stage {
-  position: relative;
-  width: min(82vw, 368px);
-  margin: -1px auto -7px;
-  aspect-ratio: 420 / 360;
-  touch-action: manipulation;
-}
-
-.cake-halo {
-  position: absolute;
-  width: 68%;
-  height: 49%;
-  left: 16%;
-  top: 27%;
-  border-radius: 50%;
-  background: rgba(59, 130, 246, .13);
-  filter: blur(42px);
-  transition: opacity .6s ease, transform .6s ease;
-}
-
-.cake-art:not(.cake-art--compact) {
-  position: relative;
-  z-index: 1;
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  filter: drop-shadow(0 18px 28px rgba(0, 7, 20, .22));
-}
-
-.number-candle {
-  fill: url(#blueIcing);
-  stroke: #f8fbff;
-  stroke-width: 2px;
-  paint-order: stroke fill;
-  font-family: Georgia, serif;
-  font-size: 103px;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 11px;
+  color: #d2e2fb;
+  border: 1px solid rgba(167, 201, 243, .52);
+  border-radius: 10px;
+  background: rgba(8, 16, 30, .82);
+  font-size: 11px;
   font-weight: 600;
-  filter: drop-shadow(0 0 9px rgba(121, 184, 255, .35));
-}
-
-.candle-flame { transform-box: fill-box; transform-origin: 50% 100%; animation: flameDance .85s ease-in-out infinite alternate; transition: opacity .28s ease, transform .35s ease; }
-.candle-flame--right { animation-delay: -.39s; }
-.cake-art--out .candle-flame { opacity: 0; transform: translateY(-5px) scale(.72); }
-.candle-smoke { opacity: 0; transition: opacity .3s ease .08s; }
-.cake-art--out .candle-smoke { opacity: .78; animation: smokeRise 1.5s ease-out both; }
-
-.candle-tap {
-  position: absolute;
-  z-index: 3;
-  top: 10%;
-  width: 17%;
-  height: 29%;
-  border: 0;
-  border-radius: 24px;
-  background: transparent;
   cursor: pointer;
-  touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
-
-.candle-tap--two { left: 34%; }
-.candle-tap--zero { left: 51.5%; }
-.candle-tap:hover { background: rgba(121, 184, 255, .04); }
-.candle-tap:active { background: rgba(121, 184, 255, .12); }
-.candle-tap:focus-visible { outline: 2px solid #fff; outline-offset: 2px; background: rgba(121, 184, 255, .1); }
-.candle-tap[aria-disabled="true"] { cursor: default; }
-
-.cake-stage--wish .cake-halo { opacity: .5; transform: scale(1.18); }
-.wish-star-burst { position: absolute; z-index: 4; inset: 0; overflow: visible; pointer-events: none; }
-.wish-star {
-  position: absolute;
-  top: 47%;
-  left: var(--star-left);
-  color: #dcecff;
-  font-style: normal;
-  font-size: calc(15px * var(--star-scale));
-  text-shadow: 0 0 12px rgba(121, 184, 255, .8);
-  opacity: 0;
-  animation: wishLift var(--star-duration) cubic-bezier(.16, .52, .35, 1) var(--star-delay) both;
-}
-
-.wish-star:nth-child(3n) { color: #79b8ff; }
-.wish-copy { position: relative; min-height: 48px; margin-top: -5px; text-align: center; }
-.tap-instruction, .wish-question, .wish-response { margin: 0; }
-.tap-instruction { color: rgba(231, 239, 251, .77); font-size: 13px; }
-.wish-copy--visible { animation: noteArrive .42s ease both; }
-.wish-question { font-family: var(--serif); font-size: 21px; }
-.wish-response { margin-top: 5px; color: #b9d6fc; font-size: 13px; }
-.birthday-actions { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 48px; margin-top: 2px; }
 .replay-button {
   display: inline-flex;
   align-items: center;
@@ -608,6 +551,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 
 .scene-progress span { width: 4px; height: 4px; border-radius: 50%; background: #9bb9e0; transition: width .25s ease, background .25s ease; }
 .scene-progress span.is-active { width: 18px; border-radius: 4px; background: #79b8ff; }
+.scene-progress--birthday { display: none; }
 
 .music-dock {
   position: fixed;
@@ -630,8 +574,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 .editor-audio-preview { display: block; width: 100%; height: 42px; margin-top: 10px; }
 .music-file-name { overflow: hidden; margin: 9px 0 0; color: #405979; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
 .music-dock--hidden { visibility: hidden; pointer-events: none; }
-.scene--birthday.scene--with-music { display: grid; place-items: start center; overflow-y: auto; padding-bottom: max(130px, calc(env(safe-area-inset-bottom) + 110px)); }
-.scene--birthday.scene--with-music .birthday-content { margin-block: auto; }
 
 .card-editor {
   width: min(94vw, 760px);
@@ -701,21 +643,15 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   to { opacity: 1; transform: perspective(900px) rotateY(0) translateX(0); }
 }
 
-@keyframes flameDance {
-  from { transform: rotate(-3deg) scale(.97, 1.02); }
-  to { transform: rotate(3deg) scale(1.02, .96); }
+@keyframes posterFlameDance {
+  from { transform: rotate(-2.5deg) scale(.94, 1.04); }
+  to { transform: rotate(2.5deg) scale(1.04, .96); }
 }
 
-@keyframes smokeRise {
-  0% { opacity: .15; transform: translateY(10px); }
-  45% { opacity: .82; }
-  100% { opacity: 0; transform: translateY(-15px); }
-}
-
-@keyframes wishLift {
-  0% { opacity: 0; transform: translate3d(0, 14px, 0) scale(.45) rotate(-20deg); }
-  22% { opacity: 1; }
-  100% { opacity: 0; transform: translate3d(var(--star-drift), -112px, 0) scale(1.1) rotate(34deg); }
+@keyframes posterSmokeRise {
+  0% { opacity: 0; transform: translateY(10%); }
+  22% { opacity: .65; }
+  100% { opacity: 0; transform: translateY(-38%); }
 }
 
 @keyframes noteArrive {
@@ -725,6 +661,7 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
 
 @media (max-width: 560px) {
   .scene { padding-left: 20px; padding-right: 20px; }
+  .scene--birthday { padding: 0; }
   .scene--message { padding-top: max(24px, env(safe-area-inset-top)); padding-bottom: max(65px, env(safe-area-inset-bottom)); }
   .message-content { padding-bottom: 10px; }
   .cover-card__art .tiny-cake-friend { width: 202px; height: 180px; }
@@ -745,12 +682,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   .letter-footer { align-items: stretch; flex-direction: column; margin-top: 10px; }
   .letter-footer > p { text-align: center; }
   .letter-footer .primary-button { width: 100%; }
-  .birthday-content { width: 100%; }
-  .birthday-copy h1 { max-width: 390px; font-size: clamp(30px, 7.8vw, 39px); }
-  .make-wish { font-size: 17px; }
-  .cake-stage { width: min(86vw, 350px); }
-  .birthday-actions { gap: 8px; }
-  .birthday-actions .primary-button--small { min-width: 150px; }
   .card-editor { width: calc(100vw - 22px); max-height: 92dvh; border-radius: 13px; }
   .card-editor__form { max-height: 92dvh; padding: 20px 18px 17px; }
   .card-editor__header h2 { font-size: 24px; }
@@ -780,13 +711,12 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   .music-note { margin: 10px 0 8px; }
   .last-rule { min-height: 60px; margin-top: 7px; }
   .letter-footer { margin-top: 8px; }
-  .birthday-content { transform: translateY(-1px) scale(.94); }
-  .birthday-copy .eyebrow { margin-bottom: 6px; }
-  .birthday-copy h1 { font-size: clamp(28px, 6vw, 37px); }
-  .make-wish { margin-top: 7px; font-size: 16px; }
-  .cake-stage { width: min(78vw, 315px); }
-  .wish-copy { min-height: 40px; }
-  .birthday-actions { min-height: 42px; }
+  .poster-wish-copy { top: 83%; left: 4%; width: 92%; padding: 4px 3px; }
+  .poster-wish-copy .wish-question { font-size: 12px; }
+  .poster-wish-copy .wish-response { margin-top: 2px; font-size: 9px; }
+  .birthday-actions { gap: 6px; }
+  .birthday-actions .primary-button--small,
+  .birthday-actions .replay-button { min-height: 36px; padding-right: 9px; padding-left: 9px; font-size: 10px; }
 }
 
 @media (max-width: 360px) {
@@ -794,9 +724,6 @@ h1, h2 { font-family: var(--serif); font-weight: 500; }
   .letter-side h2 { font-size: 29px; }
   .last-rule__friend { flex-basis: 50px; width: 50px; height: 48px; }
   .rule-copy { font-size: 10px; }
-  .birthday-actions { flex-direction: column; min-height: 0; }
-  .birthday-actions .primary-button--small,
-  .birthday-actions .replay-button { width: min(100%, 250px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

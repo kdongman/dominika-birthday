@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import dominikaPhoto from './assets/dominika.jpg'
+import birthdayPoster from './assets/dominika-birthday-poster.png'
 import './App.css'
 
 type Scene = 'surprise' | 'message' | 'birthday'
@@ -41,14 +42,6 @@ const stars = Array.from({ length: 18 }, (_, index) => ({
   delay: `${(index * 173) % 5900}ms`,
   duration: `${3400 + ((index * 227) % 3100)}ms`,
   blue: index % 5 === 0,
-}))
-
-const wishStars = Array.from({ length: 20 }, (_, index) => ({
-  left: `${17 + ((index * 37) % 67)}%`,
-  delay: `${(index % 7) * 65}ms`,
-  duration: `${1250 + ((index * 83) % 900)}ms`,
-  drift: `${((index * 29) % 88) - 44}px`,
-  scale: 0.6 + ((index * 13) % 6) / 10,
 }))
 
 function useObjectUrl(file: File | null) {
@@ -196,80 +189,6 @@ function StarField() {
   )
 }
 
-function CakeArtwork({ lit = true }: { lit?: boolean }) {
-  return (
-    <svg
-      className={`cake-art${lit ? '' : ' cake-art--out'}`}
-      viewBox="0 0 420 360"
-      role="img"
-      aria-label="A two-tier blue and white birthday cake with number candles"
-    >
-      <defs>
-        <linearGradient id="cakeSide" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0" stopColor="#fff" />
-          <stop offset="1" stopColor="#e4edfb" />
-        </linearGradient>
-        <linearGradient id="blueIcing" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0" stopColor="#94c6ff" />
-          <stop offset="1" stopColor="#4e8de4" />
-        </linearGradient>
-        <linearGradient id="warmFlame" x1="0" x2="0" y1="1" y2="0">
-          <stop offset="0" stopColor="#ffb34f" />
-          <stop offset="1" stopColor="#fff4cf" />
-        </linearGradient>
-        <radialGradient id="cakeGlow">
-          <stop offset="0" stopColor="#79b8ff" stopOpacity=".22" />
-          <stop offset="1" stopColor="#79b8ff" stopOpacity="0" />
-        </radialGradient>
-        <filter id="cakeShadow" x="-25%" y="-30%" width="150%" height="180%">
-          <feGaussianBlur stdDeviation="8" />
-        </filter>
-      </defs>
-
-      <ellipse cx="210" cy="309" rx="160" ry="39" fill="url(#cakeGlow)" />
-      <ellipse cx="210" cy="307" rx="128" ry="16" fill="#010713" opacity=".42" filter="url(#cakeShadow)" />
-
-      <path d="M87 292h246l-24 18H111z" fill="#91b8ea" />
-      <path d="M108 288h204v10c-34 13-68 19-102 19s-68-6-102-19z" fill="#dceaff" />
-      <ellipse cx="210" cy="288" rx="112" ry="14" fill="#f8fbff" stroke="#b9d5f7" strokeWidth="2" />
-
-      <path d="M69 215c0-17 63-31 141-31s141 14 141 31v61c0 18-63 32-141 32S69 294 69 276z" fill="url(#cakeSide)" />
-      <ellipse cx="210" cy="215" rx="141" ry="31" fill="#fff" stroke="#d1e2f8" strokeWidth="2" />
-      <path d="M70 213c25-18 83-29 140-29s115 11 140 29c-4 11-22 17-47 22-5 1-8 5-9 11-2 10-14 12-20 5-4-4-4-10-5-15-20 3-40 5-59 5s-39-2-59-5c-1 8-2 15-9 18-8 4-17-1-18-10-1-5-4-8-9-9-23-4-41-11-45-22z" fill="url(#blueIcing)" />
-      <path d="M83 237c33 11 79 17 127 17s94-6 127-17" fill="none" stroke="#f4f9ff" strokeOpacity=".75" strokeWidth="2" />
-
-      <path d="M121 154c0-12 40-22 89-22s89 10 89 22v52c0 12-40 22-89 22s-89-10-89-22z" fill="url(#cakeSide)" />
-      <ellipse cx="210" cy="154" rx="89" ry="22" fill="#fff" stroke="#d1e2f8" strokeWidth="2" />
-      <path d="M122 153c16-12 51-20 88-20s72 8 88 20c-5 8-18 13-35 16-4 1-6 4-7 9-1 8-10 10-15 5-3-3-3-7-4-11-9 1-18 2-27 2s-18-1-27-2c-1 5-2 10-7 12-6 3-13-1-13-7-1-4-3-6-7-7-18-3-31-8-34-15z" fill="url(#blueIcing)" />
-      <path d="M137 172c21 8 47 12 73 12s52-4 73-12" fill="none" stroke="#f4f9ff" strokeOpacity=".8" strokeWidth="2" />
-
-      <g fill="#f9fcff" opacity=".95">
-        <circle cx="116" cy="266" r="3" /><circle cx="153" cy="279" r="2.5" />
-        <circle cx="269" cy="280" r="2.5" /><circle cx="304" cy="264" r="3" />
-      </g>
-      <g fill="#6ca4e9">
-        <circle cx="144" cy="244" r="2.4" /><circle cx="276" cy="243" r="2.4" />
-        <circle cx="210" cy="280" r="2.4" />
-      </g>
-
-      <text className="number-candle" x="176" y="139" textAnchor="middle">2</text>
-      <text className="number-candle" x="250" y="139" textAnchor="middle">0</text>
-      <g className="candle-flame candle-flame--left">
-        <path d="M176 51c-2 12-13 17-12 27 1 9 7 14 13 14 7 0 13-5 13-14 0-8-9-15-14-27z" fill="url(#warmFlame)" />
-        <path d="M177 69c-2 6-6 9-6 13 0 4 3 7 6 7 4 0 7-3 7-7 0-5-5-9-7-13z" fill="#fffdf5" />
-      </g>
-      <g className="candle-flame candle-flame--right">
-        <path d="M250 51c-2 12-13 17-12 27 1 9 7 14 13 14 7 0 13-5 13-14 0-8-9-15-14-27z" fill="url(#warmFlame)" />
-        <path d="M251 69c-2 6-6 9-6 13 0 4 3 7 6 7 4 0 7-3 7-7 0-5-5-9-7-13z" fill="#fffdf5" />
-      </g>
-      <g className="candle-smoke" fill="none" stroke="#dcecff" strokeLinecap="round" strokeWidth="3">
-        <path d="M175 83c-12-8 10-13-1-22" />
-        <path d="M251 83c-12-8 10-13-1-22" />
-      </g>
-    </svg>
-  )
-}
-
 function TinyCakeFriend() {
   return (
     <div className="tiny-cake-friend" aria-hidden="true">
@@ -301,49 +220,59 @@ function TinyCakeFriend() {
 function CakeScene({
   extinguished,
   onBlowOut,
+  wishVisible,
+  continueVisible,
+  resetWish,
+  onSeeCard,
 }: {
   extinguished: boolean
   onBlowOut: () => void
+  wishVisible: boolean
+  continueVisible: boolean
+  resetWish: () => void
+  onSeeCard: () => void
 }) {
   return (
-    <div className={`cake-stage${extinguished ? ' cake-stage--wish' : ''}`}>
-      <div className="cake-halo" aria-hidden="true" />
-      <CakeArtwork lit={!extinguished} />
+    <div className={`birthday-content${extinguished ? ' birthday-content--extinguished' : ''}`}>
+      <img className="birthday-poster" src={birthdayPoster} alt="Wait, there's one more thing. Make a wish, then tap a candle. Tap either candle to blow it out." />
+      <svg className="poster-flame poster-flame--two" viewBox="0 0 32 54" aria-hidden="true">
+        <path className="poster-flame__glow" d="M16 1C14 14 2 23 3 37c1 10 6 15 13 15s12-5 13-15C30 23 18 14 16 1Z" />
+        <path className="poster-flame__core" d="M16 17c-2 8-7 13-6 21 0 5 2 8 6 8s6-3 6-8c1-8-4-13-6-21Z" />
+      </svg>
+      <svg className="poster-flame poster-flame--zero" viewBox="0 0 32 54" aria-hidden="true">
+        <path className="poster-flame__glow" d="M16 1C14 14 2 23 3 37c1 10 6 15 13 15s12-5 13-15C30 23 18 14 16 1Z" />
+        <path className="poster-flame__core" d="M16 17c-2 8-7 13-6 21 0 5 2 8 6 8s6-3 6-8c1-8-4-13-6-21Z" />
+      </svg>
+      <svg className="poster-smoke poster-smoke--two" viewBox="0 0 36 72" aria-hidden="true"><path d="M19 67c-18-14 18-20 1-35S25 10 16 3" /></svg>
+      <svg className="poster-smoke poster-smoke--zero" viewBox="0 0 36 72" aria-hidden="true"><path d="M19 67c-18-14 18-20 1-35S25 10 16 3" /></svg>
       <button
-        className="candle-tap candle-tap--two"
+        className="poster-candle-hit poster-candle-hit--two"
         onClick={onBlowOut}
         aria-label={`Number 2 candle ${extinguished ? 'is out' : 'is lit'}`}
-        aria-disabled={extinguished}
+        disabled={extinguished}
       >
-        <span className="visually-hidden">{extinguished ? 'Number 2 candle is out' : 'Blow out the number 2 candle'}</span>
       </button>
       <button
-        className="candle-tap candle-tap--zero"
+        className="poster-candle-hit poster-candle-hit--zero"
         onClick={onBlowOut}
         aria-label={`Number 0 candle ${extinguished ? 'is out' : 'is lit'}`}
-        aria-disabled={extinguished}
+        disabled={extinguished}
       >
-        <span className="visually-hidden">{extinguished ? 'Number 0 candle is out' : 'Blow out the number 0 candle'}</span>
       </button>
-      {extinguished && (
-        <div className="wish-star-burst" aria-hidden="true">
-          {wishStars.map((star, index) => (
-            <i
-              className="wish-star"
-              key={index}
-              style={{
-                '--star-left': star.left,
-                '--star-delay': star.delay,
-                '--star-duration': star.duration,
-                '--star-drift': star.drift,
-                '--star-scale': star.scale,
-              } as CSSProperties}
-            >
-              {index % 4 === 0 ? '✦' : '✧'}
-            </i>
-          ))}
+      {wishVisible && (
+        <div className="poster-wish-copy" aria-live="polite" aria-atomic="true">
+          <p className="wish-question">Wish received. Keep it secret <span className="text-emoji">🤫</span></p>
+          <p className="wish-response">I hope today stays with you for a long time.</p>
         </div>
       )}
+      <div className="birthday-actions">
+        {continueVisible && (
+          <>
+            <button className="primary-button primary-button--small" onClick={onSeeCard}>See the card again</button>
+            <button className="replay-button replay-button--light" onClick={resetWish}>Wish once more</button>
+          </>
+        )}
+      </div>
     </div>
   )
 }
@@ -441,8 +370,8 @@ function App() {
     if (hasBlownOutRef.current) return
     hasBlownOutRef.current = true
     setExtinguished(true)
-    wishTimer.current = setTimeout(() => setWishVisible(true), 420)
-    continueTimer.current = setTimeout(() => setContinueVisible(true), 1500)
+    wishTimer.current = setTimeout(() => setWishVisible(true), 1050)
+    continueTimer.current = setTimeout(() => setContinueVisible(true), 2500)
   }
 
   const resetWish = () => {
@@ -692,45 +621,17 @@ function App() {
         )}
 
         {scene === 'birthday' && (
-          <div className="birthday-content">
-            <div className="birthday-copy">
-              <p className="eyebrow">one more little surprise</p>
-              <h1 ref={sceneHeadingRef} tabIndex={-1}>Wait, there's one more thing.</h1>
-              <p className="make-wish">Make a wish, <span>then tap a candle.</span></p>
-            </div>
-            <CakeScene extinguished={extinguished} onBlowOut={blowOut} />
-            <div className={`wish-copy${wishVisible ? ' wish-copy--visible' : ''}`} aria-live="polite" aria-atomic="true">
-              {wishVisible ? (
-                <>
-                  <p className="wish-question">Wish received. Keep it secret <span className="text-emoji">🤫</span></p>
-                  <p className="wish-response">I hope today stays with you for a long time.</p>
-                </>
-              ) : (
-                <p className="tap-instruction">Tap either candle to blow it out.</p>
-              )}
-            </div>
-            <div className="birthday-actions">
-              {continueVisible && (
-                <>
-                  <button
-                    className="primary-button primary-button--small"
-                    onClick={() => {
-                      setCardSide('letter')
-                      moveTo('message')
-                    }}
-                  >
-                    See the card again
-                  </button>
-                  <button className="replay-button replay-button--light" onClick={resetWish}>
-                    Wish once more
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
+          <CakeScene
+            extinguished={extinguished}
+            onBlowOut={blowOut}
+            wishVisible={wishVisible}
+            continueVisible={continueVisible}
+            resetWish={resetWish}
+            onSeeCard={() => { setCardSide('letter'); moveTo('message') }}
+          />
         )}
       </section>
-      <div className="scene-progress" aria-hidden="true">
+      <div className={`scene-progress scene-progress--${scene}`} aria-hidden="true">
         {(['message', 'birthday'] as Scene[]).map((item) => (
           <span key={item} className={scene === item ? 'is-active' : ''} />
         ))}
