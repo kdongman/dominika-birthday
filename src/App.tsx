@@ -641,7 +641,7 @@ function App() {
     }
     setCardSide('photo')
     setGiftOpening(true)
-    giftOpenTimer.current = setTimeout(() => moveTo('message'), 580)
+    giftOpenTimer.current = setTimeout(() => moveTo('message'), 820)
   }
 
   const openBirthdayScene = async () => {
@@ -664,6 +664,12 @@ function App() {
               alt="A birthday letter for Dominika, tucked into a sealed envelope."
               draggable={false}
             />
+            <div className="surprise-opening-note" aria-hidden="true">
+              <span>A little birthday wish</span>
+              <strong>For Dominika</strong>
+              <i>with love</i>
+              <b>♥</b>
+            </div>
             <button
               className="surprise-artboard__hit surprise-artboard__hit--envelope"
               type="button"
